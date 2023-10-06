@@ -99,11 +99,125 @@
                                 <p class="soft-text">{{ subcategory.description }}
                                 </p>
                             </div>
+                            
                         </li>
                     {% endfor %}
+                    
                 </ul>
             </div>
         </div>
     {% endif %}
+    
 {% endfor %}
+<div class="text-center mb-5">
+    <h2 class="display-5 soft-text">Suggest New Content</h2>
+    <p class="soft-text">Help us improve by suggesting videos or categories.</p>
+</div>
+
+<!-- Video Suggestion Form -->
+<div class="card mb-5 shadow-lg rounded">
+    <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#videoSuggestionForm" aria-expanded="false" aria-controls="videoSuggestionForm" style="cursor:pointer;">
+        <h5 class="soft-text mb-0">
+            <i class="bi bi-camera-video"></i> Suggest a Video  <!-- Added the video icon here -->
+        </h5>
+        <i class="bi bi-chevron-down arrow-icon"></i>
+    </div>
+    <div class="collapse" id="videoSuggestionForm">
+        <div class="card-body">
+            <form method="post" action="{% url 'index' %}">
+                <input type="hidden" name="video_suggestion" value="true">
+                {% csrf_token %}
+                
+                <!-- Video Title -->
+                <div class="form-group">
+                    <label for="videoTitle">Video Title</label>
+                    <input type="text" class="form-control" id="videoTitle" name="title" placeholder="Enter video title">
+                </div>
+                
+                <!-- Video URL -->
+                <div class="form-group">
+                    <label for="videoURL">Video URL</label>
+                    <input type="url" class="form-control" id="videoURL" name="url" placeholder="Enter video URL">
+                </div>
+                
+                <!-- Video Tags (Optional) -->
+                <div class="form-group">
+                    <label for="videoTags">Tags (comma separated)</label>
+                    <input type="text" class="form-control" id="videoTags" name="tags" placeholder="e.g. web security, xss">
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-custom">Submit Video Suggestion</button>
+            </form>
+            
+        {% if feedback_message %}
+        <div class="alert alert-success mt-3">
+            {{ feedback_message }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+</div>
+<!-- Category Suggestion Form -->
+<div class="card mb-5 shadow-lg rounded">
+    <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#categorySuggestionForm" aria-expanded="false" aria-controls="categorySuggestionForm" style="cursor:pointer;">
+        <h5 class="soft-text mb-0">
+            <i class="bi bi-folder-plus"></i> Suggest a Category  <!-- Added the folder icon here -->
+        </h5>
+        <i class="bi bi-chevron-down arrow-icon"></i>
+    </div>
+    <div class="collapse" id="categorySuggestionForm">
+        <div class="card-body"> 
+
+            <form method="post" action="{% url 'index' %}">
+                <input type="hidden" name="category_suggestion" value="true">
+                {% csrf_token %}
+                
+                <!-- Category Name -->
+                <div class="form-group">
+                    <label for="categoryName">Category Name</label>
+                    <input type="text" class="form-control" id="categoryName" name="name" placeholder="Enter category name">
+                </div>
+                
+                <!-- Category Description (Optional) -->
+                <div class="form-group">
+                    <label for="categoryDescription">Description</label>
+                    <textarea class="form-control" id="categoryDescription" name="description" rows="3" placeholder="Describe the category..."></textarea>
+                </div>
+            
+                <!-- Parent Category (Optional) -->
+                <div class="form-group">
+                    <label for="parentCategory">Parent Category</label>
+                    <select class="form-control" id="parentCategory" name="parent">
+                        <option value="">None</option>
+                        {% for category in categories %}
+                            <option value="{{ category.id }}">{{ category.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- Submit Button -->
+                <button type="submit" class="btn btn-custom">Submit Category Suggestion</button>
+            </form>
+            
+        {% if feedback_message %}
+        <div class="alert alert-success mt-3">
+            {{ feedback_message }}
+        </div>
+        {% endif %}
+    </div>
+</div>
+<style>
+    .btn-custom {
+        background-color: #f8f9fa;  /* light background color */
+        border: 1px solid #ced4da;  /* gray border */
+        color: #495057;  /* dark text */
+        transition: all 0.3s ease;  /* smooth transition for hover effects */
+    }
+
+    .btn-custom:hover {
+        background-color: #e9ecef;  /* slightly darker background on hover */
+    }
+</style>
+
 {% endblock content %}

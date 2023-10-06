@@ -1,40 +1,55 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .models import Category, Video
+from .forms import VideoSuggestionForm, CategorySuggestionForm
 #from googleapiclient.discovery import build
 #from googleapiclient.errors import HttpError
 import re
-
+import logging
 
 def index(request):
-    api_key = ''
+    video_suggestion_form = VideoSuggestionForm()
+    category_suggestion_form = CategorySuggestionForm()
+    feedback_message = None
+
+    if request.method == 'POST':
+        if 'video_suggestion' in request.POST:
+            video_suggestion_form = VideoSuggestionForm(request.POST)
+            if video_suggestion_form.is_valid():
+
+                try:
+                    video_suggestion_form.save()
+                    logging.info(f"Video suggestion form data: {video_suggestion_form.cleaned_data}")
+                    feedback_message = "Thank you for your video suggestion!"
+                except:
+                    feedback_message = "An error occurred while saving your video suggestion."
+                    logging.exception("An error occurred while saving a video suggestion.")
+                    logging.info(f"Video suggestion form data: {video_suggestion_form.cleaned_data}")
+            if not video_suggestion_form.is_valid():
+                print(video_suggestion_form.errors)        
+
+        elif 'category_suggestion' in request.POST:
+            category_suggestion_form = CategorySuggestionForm(request.POST)
+            if category_suggestion_form.is_valid():
+                try:
+                    category_suggestion_form.save()
+                    print(category_suggestion_form.cleaned_data)
+                    logging.info(f"Category suggestion form data: {category_suggestion_form.cleaned_data}")
+                    feedback_message = "Thank you for your category suggestion!"
+                except:
+                    print(category_suggestion_form.cleaned_data)
+                    feedback_message = "An error occurred while saving your category suggestion."
+                    logging.exception("An error occurred while saving a category suggestion.")
+                    logging.info(f"Category suggestion form data: {category_suggestion_form.cleaned_data}")
+            if not category_suggestion_form.is_valid():
+                print(category_suggestion_form.errors)
+
     categories = Category.objects.all()
-    description = Video.objects.all()
-    # Iterate through each category and its videos to fetch details from YouTube
-    """
-        for category in categories:
-        for video in category.videos.all():
-            video_id = extract_video_id_from_url(video.url)
-            details = get_video_details(video_id, api_key)
-             
-            if details:
-                print(details)
-                video.title = details['title']
-                video.author = details['channel_title']
-                print(video.author)
-   #             video.description = details['description']
-   #             video.channel_title = details['channel_title'] 
-    
-    """
-
-
     return render(request, 'index.html', {
         'categories': categories,
-    #    'author': video.author,
-        'description': description,
-   #     'video_description': video.description,
-   #     'video_channel_title': video.channel_title
+        'video_suggestion_form': video_suggestion_form,
+        'category_suggestion_form': category_suggestion_form,
+        'feedback_message': feedback_message
     })
-
 
 def category_videos(request, category_id):
     description = Video.objects.filter(category=category_id)

@@ -22,3 +22,24 @@ class Video(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class CategorySuggestion(models.Model):
+    name = models.CharField(max_length=255)
+    description = models.TextField(blank=True)
+    parent = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
+
+
+class VideoSuggestion(models.Model):
+    title = models.CharField(max_length=255)
+    url = models.URLField()
+    tags = models.CharField(max_length=255, blank=True)  
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    approved = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
