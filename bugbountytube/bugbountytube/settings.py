@@ -38,7 +38,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'videos',
-    'markdownify.apps.MarkdownifyConfig',
+    'grappelli',
+    'adminsortable2',
 ]
 
 MIDDLEWARE = [
