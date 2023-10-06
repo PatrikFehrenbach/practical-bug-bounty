@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% load video_filters %}
+
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1 class="display-4 soft-text">Practical Bug Bounty    </h1>
+    <p class="soft-text">A free video course from the community, for the community ❤️</p>
+</div>
+
+{% for category in categories %}
+    {% if not category.parent %}
+        <div class="card mb-5 shadow-lg rounded">
+            <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#module-{{ category.id }}" aria-expanded="false" aria-controls="module-{{ category.id }}" style="cursor:pointer;">
+                <h5 class="soft-text mb-0">
+                    <i class="bi bi-folder-plus"></i> Module: {{ category.name }}
+                </h5>
+                <i class="bi bi-chevron-down arrow-icon"></i>
+            </div>
+            <div class="collapse" id="module-{{ category.id }}">
+                <ul class="list-group list-group-flush">
+                    {% for subcategory in category.subcategories.all %}
+                        <li class="list-group-item bg-light hover-shadow">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <span class="soft-text font-weight-bold">
+                                    <i class="bi bi-folder2-open"></i> {{ subcategory.name }}
+                                </span>
+                                <div>
+                                    <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#videos-{{ subcategory.id }}" aria-expanded="false" aria-controls="videos-{{ subcategory.id }}" onclick="$('#notes-{{ subcategory.id }}').collapse('hide');">
+                                        <i class="bi bi-list"></i> View Videos
+                                    </button>
+                                    <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#notes-{{ subcategory.id }}" aria-expanded="false" aria-controls="notes-{{ subcategory.id }}" onclick="$('#videos-{{ subcategory.id }}').collapse('hide');">
+                                        <i class="bi bi-book"></i> View Course Notes
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Videos Collapse Section -->
+                            <div class="collapse mt-3 bg-white p-2 rounded shadow-sm" id="videos-{{ subcategory.id }}">
+                                {% for video in subcategory.videos.all %}
+                                    <div class="d-flex justify-content-between align-items-center hover-bg p-2 rounded my-1">
+                                        <span class="soft-text ml-2">{{ video.title }}</span>
+                                        <div>
+                                            <button class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#videoModal-{{ video.id }}">
+                                                <i class="bi bi-play"></i> Watch
+                                            </button>
+                                            <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#detailsModal-{{ video.id }}">
+                                                <i class="bi bi-info-circle"></i> Details
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal for Video Playback -->
+                                    <div class="modal fade" id="videoModal-{{ video.id }}" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel-{{ video.id }}" aria-hidden="true">
+                                        <div class="modal-dialog modal-lg" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <span class="soft-text ml-2">{{ video.title }} </span>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div class="embed-responsive embed-responsive-16by9">
+                                                        <iframe class="embed-responsive-item" src="{{ video.url|embed_url }}" allowfullscreen></iframe>
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal for Video Details -->
+                                    <div class="modal fade" id="detailsModal-{{ video.id }}" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel-{{ video.id }}" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="detailsModalLabel-{{ video.id }}">{{ video.title }}</h5>
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                        <span aria-hidden="true">&times;</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    {{ video.description }}
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+
+                            <!-- Course Notes Collapse Section -->
+                            <div class="collapse mt-3 bg-white p-2 rounded shadow-sm" id="notes-{{ subcategory.id }}">
+                                <p class="soft-text">{{ subcategory.description }}
+                                </p>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}
+{% endblock content %}
