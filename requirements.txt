@@ -1,4 +1,4 @@
 django
-markdownify
 django-grappelli
 django-admin-sortable2
+django-markdownx

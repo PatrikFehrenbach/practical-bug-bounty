@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% load video_filters %}
-
+{% load markdownify %}
 
 {% block content %}
 <div class="text-center mb-5">
@@ -96,7 +96,7 @@
 
                             <!-- Course Notes Collapse Section -->
                             <div class="collapse mt-3 bg-white p-2 rounded shadow-sm" id="notes-{{ subcategory.id }}">
-                                <p class="soft-text">{{ subcategory.description }}
+                                <p class="soft-text">{{ subcategory.description |formatted_markdown }}
                                 </p>
                             </div>
                             

@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bym030g!9%ywrl^qxzhcfh=6o448g^(_+gq=m(m%8l^k67jh@2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'videos',
     'grappelli',
     'adminsortable2',
+    'markdownx',
 ]
 
 MIDDLEWARE = [

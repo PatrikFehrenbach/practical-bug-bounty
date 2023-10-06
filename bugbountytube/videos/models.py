@@ -1,4 +1,5 @@
 from django.db import models
+from markdownx.models import MarkdownxField
 
 class Category(models.Model):
     name = models.CharField(max_length=255)
@@ -26,7 +27,7 @@ class Video(models.Model):
 
 class CategorySuggestion(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField(blank=True)
+    description = MarkdownxField()
     parent = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True, blank=True)
     approved = models.BooleanField(default=False)
 
