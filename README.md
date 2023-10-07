@@ -4,12 +4,11 @@ Welcome to the Practical Bug Bounty project! This platform is designed to help u
 
 <img width="1249" alt="Screenshot 2023-10-06 at 12 49 40" src="https://github.com/PatrikFehrenbach/practical-bug-bounty/assets/9072595/5f7735fd-4eca-4815-8801-ab849c3949b7">
 
-
 ## 🚧 Project Status: In Development 🚧
 
 This project is currently in its development phase and there's a lot more to be done. I am actively seeking community contributions to make this platform even better!
 
-### Demo Credentials
+<!-- ### Demo Credentials
 For those who want to check out the current state of the project, we have set up a demo account:
 
 Go to http://localhost:8000/admin
@@ -17,7 +16,7 @@ Go to http://localhost:8000/admin
 - **Username:** `test`
 - **Password:** `test`
 
-However, please note that this is a development version, and it's highly recommended to not use these credentials for production.
+However, please note that this is a development version, and it's highly recommended to not use these credentials for production. --> 
 
 ## Features
 
@@ -29,21 +28,36 @@ However, please note that this is a development version, and it's highly recomme
 
 I am always welcoming contributions from everyone! Whether it's a typo fix, a new feature, or a bug fix, your help is greatly appreciated. 
 
-
 ## Development Setup
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/patrikfehrenbach/practical-bug-bounty.git
+   git clone https://github.com/patrikfehrenbach/practical-bug-bounty.git practical-bug-bounty/
+   cd $_
    ```
+
 2. **Install Django + Addons**
     ```bash
     python3 -m pip install -r requirements.txt
-    ``` 
-3. **Run the server** 
+    ```
+
+3. **Run migrations**
+    ```bash
+    cd bugbountytube/
+    python3 manage.py migrate
+    ```
+
+4. **Create super user**
+    ```bash
+    python3 manage.py createsuperuser
+    ```
+
+5. **Run the server**
     ```bash
     python3 manage.py runserver
-    ``` 
+    ```
+
+6. **Navigate to http://localhost:8000**
 
 ## Usage
 
