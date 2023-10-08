@@ -83,7 +83,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'bugbountytube.wsgi.application'
 
-USE_POSTGRES = os.environ.get('USE_POSTGRES', True)
+USE_POSTGRES = os.environ.get('USE_POSTGRES', False)
 
 if USE_POSTGRES:
     DATABASES = {
