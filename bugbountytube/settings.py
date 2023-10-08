@@ -88,9 +88,13 @@ WSGI_APPLICATION = 'bugbountytube.wsgi.application'
 USE_POSTGRES = os.environ.get('USE_POSTGRES', 'False') == 'True'
 
 if USE_POSTGRES:
-    DATABASES = {
-        'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
-    }
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        DATABASES = {
+            'default': dj_database_url.config(default=DATABASE_URL)
+        }
+    else:
+        raise ValueError("USE_POSTGRES is set, but DATABASE_URL is not provided.")
 else:
     DATABASES = {
         'default': {
