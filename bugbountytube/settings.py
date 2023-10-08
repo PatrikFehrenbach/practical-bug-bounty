@@ -23,6 +23,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-bym030g!9%ywrl^qxzhcfh=6o448g^(_+gq=m(m%8l^k67jh@2'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+
+IS_DEBUG = os.environ.get('IS_DEBUG', 'True')
+
+if IS_DEBUG == 'True':
+    DEBUG = True
+else:
+    DEBUG = False
+
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
@@ -74,6 +82,27 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'bugbountytube.wsgi.application'
+
+USE_POSTGRES = os.environ.get('USE_POSTGRES', False)
+
+if USE_POSTGRES:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': os.environ.get('DB_NAME'),
+            'USER': os.environ.get('DB_USER'),
+            'PASSWORD': os.environ.get('DB_PASSWORD'),
+            'HOST': os.environ.get('DB_HOST', 'localhost'),
+            'PORT': os.environ.get('DB_PORT', '5432'),
+        }
+    }
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 
 # Database
