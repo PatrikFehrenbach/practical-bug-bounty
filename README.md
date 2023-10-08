@@ -8,6 +8,23 @@ https://github.com/PatrikFehrenbach/practical-bug-bounty/assets/9072595/5a3d0f39
 
 
 
+## Contributing to Content
+
+If you're interested in contributing to the content side of the project, we maintain a separate repository specifically for that purpose. You can find it [here](https://github.com/PatrikFehrenbach/practical-bug-bounty-content).
+
+### Steps to Contribute:
+
+1. **Fork and Clone** the [content repository](https://github.com/PatrikFehrenbach/practical-bug-bounty-content).
+2. Create a new module, submodule, or topic by following the folder structure and adding the necessary JSON and markdown files.
+3. Once you've added your content, use the provided script to generate a Django-compatible JSON dump.
+4. Submit a pull request with your changes.
+5. After review, if everything looks good, your content will be merged and reflected on the main platform.
+
+Thank you for helping the community grow!
+
+### Important Note:
+When contributing to the content, ensure that the videos and resources you add are relevant, up-to-date, and adhere to the highest ethical standards. We want this platform to be a trusted resource for everyone in the bug bounty community.
+
 
 ## 🚧 Project Status: In Development 🚧
 
