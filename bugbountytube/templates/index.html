@@ -65,7 +65,7 @@
                         <div class="collapse mt-3 bg-white p-2 rounded shadow-sm" id="notes-{{ submodule.id }}">
                             {% for topic in submodule.topics.all %}
                                 {% for note in topic.notes.all %}
-                                    <p class="soft-text">{{ note.content }}</p>
+                                    <p class="soft-text">{{ note.content | formatted_markdown  }}</p>
                                 {% endfor %}
                             {% endfor %}
                         </div>
@@ -74,7 +74,7 @@
                         <div class="collapse mt-3 bg-white p-2 rounded shadow-sm" id="links-{{ submodule.id }}">
                             {% for topic in submodule.topics.all %}
                                 {% for link in topic.additional_links.all %}
-                                    <p><a href="{{ link.url }}" class="soft-text" target="_blank">{{ link.description }}</a></p>
+                                    <p><a href="{{ link.url }}" class="soft-text" target="_blank">{{ link.description | formatted_markdown }}</a></p>
                                 {% endfor %}
                             {% endfor %}
                         </div>
@@ -83,6 +83,29 @@
                 {% endfor %}
             </ul>
         </div>
+            <!-- Video Modals -->
+    {% for submodule in module.submodules.all %}
+    {% for topic in submodule.topics.all %}
+        {% for video in topic.videos.all %}
+            <div class="modal fade" id="videoModal-{{ video.id }}" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="videoModalLabel">{{ video.title }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <iframe width="100%" height="315" src="{{ video.url|embed_url }}" frameborder="0" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endfor %}
+
     </div>
 {% endfor %}
 
