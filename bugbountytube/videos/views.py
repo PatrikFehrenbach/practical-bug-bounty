@@ -14,6 +14,14 @@ def index(request):
         'feedback_message': feedback_message
     })
 
+def contribute(request):
+    
+    return render(request, 'contribute.html')
+
+
+def philosophy(request):
+    
+    return render(request, 'philosophy.html')
 
 
 def extract_video_id_from_url(url):
