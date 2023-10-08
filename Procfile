@@ -1,1 +1,1 @@
-web: gunicorn bugbountytube.bugbountytube.wsgi
+web: gunicorn bugbountytube.wsgi
