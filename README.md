@@ -2,7 +2,12 @@
 
 Welcome to the Practical Bug Bounty project! This platform is designed to help users discover bug bounty-related videos, organized into categories, offering a curriculum-like experience.
 
-<img width="1249" alt="Screenshot 2023-10-06 at 12 49 40" src="https://github.com/PatrikFehrenbach/practical-bug-bounty/assets/9072595/5f7735fd-4eca-4815-8801-ab849c3949b7">
+
+
+https://github.com/PatrikFehrenbach/practical-bug-bounty/assets/9072595/5a3d0f39-f3d0-437f-8d01-3c59e07b2eb4
+
+
+
 
 ## 🚧 Project Status: In Development 🚧
 
@@ -33,7 +38,7 @@ I am always welcoming contributions from everyone! Whether it's a typo fix, a ne
 1. **Clone the Repository:**
    ```bash
    git clone https://github.com/patrikfehrenbach/practical-bug-bounty.git practical-bug-bounty/
-   cd $_
+   cd practical-bug-bounty
    ```
 
 2. **Install Django + Addons**
