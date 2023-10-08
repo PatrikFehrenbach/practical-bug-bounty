@@ -13,6 +13,10 @@ def index(request):
         'modules': modules,
         'feedback_message': feedback_message
     })
+    
+def contact(request):
+    
+    return render(request, 'contact.html')
 
 def contribute(request):
     
