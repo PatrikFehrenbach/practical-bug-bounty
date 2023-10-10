@@ -4,66 +4,62 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Practical Bug Bounty
-    </title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <title>Practical Bug Bounty</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-
-    <style>
-        .soft-primary {
-            background-color: #f0f4f8;
-            color: #333;
-        }
-
-        .soft-primary-border {
-            border-color: #f0f4f8;
-        }
-
-        .soft-text {
-            color: #555;
-        }
-    </style>
 </head>
 <body>
 <!-- Enhanced Navbar -->
-<nav class="navbar navbar-expand-lg soft-primary">
-    <a class="navbar-brand soft-text" href="#">Practical Bug Bounty</a>
-    <button class="navbar-toggler soft-text" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
-                <a class="nav-link soft-text" href="/">Home</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link soft-text" href="/philosophy">Philosophy</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link soft-text" href="/challenges">Challenges</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link soft-text" href="/resources">Resources</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link soft-text" href="/contribute">Contribute</a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link soft-text" href="/community">Community</a>
-            </li>
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle soft-text" href="#" id="aboutDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    About
-                </a>
-                <div class="dropdown-menu" aria-labelledby="aboutDropdown">
-                    <a class="dropdown-item soft-text" href="/contact">Contact</a>
-                </div>
-            </li>
-
-        </ul>
+<nav class="navbar navbar-expand-lg navbar-light soft-primary shadow-sm">
+    <div class="container-fluid d-flex justify-content-center">
+        <a class="navbar-brand soft-text" href="/">Practical Bug Bounty</a>
+        
+        <!-- Navbar Toggler for Mobile -->
+        <button class="navbar-toggler soft-text" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        
+        <!-- Navbar Menu Items -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link soft-text px-3" href="/">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link soft-text px-3" href="/philosophy">Philosophy</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link soft-text px-3" href="/challenges">Challenges</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link soft-text px-3" href="/resources">Resources</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link soft-text px-3" href="/contribute">Contribute</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link soft-text px-3" href="/community">Community</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle soft-text px-3" href="#" id="aboutDropdown" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        About
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="aboutDropdown">
+                        <a class="dropdown-item soft-text" href="/contact">Contact</a>
+                    </div>
+                </li>
+            </ul>
+            
+            <!-- Dark Mode Toggle on the right -->
+            <span id="darkModeToggle" class="navbar-text cursor-pointer">
+                <i class="bi bi-sun light-icon"></i>
+                <i class="bi bi-moon-fill dark-icon" style="display: none;"></i>
+            </span>
+        </div>
     </div>
 </nav>
-
 
 <!-- Main Content -->
 <div class="container mt-5">
@@ -71,19 +67,129 @@
     {% endblock content %}
 </div>
 
-<!-- Footer -->
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<!-- Bootstrap 5 JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
 <script>
-    $(document).ready(function(){
-        $('.modal').on('hidden.bs.modal', function (e) {
-            var iframe = $(this).find('iframe');
-            
-            iframe.attr('src', iframe.attr('src'));
+    document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.modal');
+        modals.forEach(function(modal) {
+            modal.addEventListener('hidden.bs.modal', function(e) {
+                var iframe = modal.querySelector('iframe');
+                iframe.src = iframe.src;
+            });
         });
+        
+        var searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            searchInput.addEventListener('keyup', function() {
+                var query = this.value;
+                if (query.length > 2) {
+                    fetch('/search/?q=' + query)
+                        .then(response => response.json())
+                        .then(data => displayResults(data))
+                        .catch(error => console.error('Error fetching search results:', error));
+                }
+            });
+        }
+    });
+
+    function displayResults(data) {
+        var resultsDiv = document.getElementById('live-search-results');
+        while (resultsDiv.firstChild) {
+            resultsDiv.removeChild(resultsDiv.firstChild);
+        }
+    
+        if (data.length === 0) {
+            var p = document.createElement('p');
+            p.textContent = 'No results found.';
+            resultsDiv.appendChild(p);
+        } else {
+            data.forEach(function(item) {
+                var a = document.createElement('a');
+                a.href = item.url;
+                a.classList.add('dropdown-item');
+                a.classList.add('search-result');  // Add the search-result class to identify this as a search result
+                a.setAttribute('data-content-text', item.title);  // Add the unique identifier or title
+                a.textContent = item.title;
+                resultsDiv.appendChild(a);
+            });
+        }
+    
+        if (data.length > 0) {
+            var dropdown = new bootstrap.Dropdown(resultsDiv.parentElement);
+            dropdown.show();
+        }
+    };
+    
+    
+// Event listener for search results
+document.addEventListener('DOMContentLoaded', function() {
+    document.body.addEventListener('click', function(e) {
+        if (e.target.classList.contains('search-result')) {
+            e.preventDefault(); // Prevent default action
+
+            // Extract content text from the clicked search result
+            let contentText = e.target.getAttribute('data-content-text');
+
+            // Search for elements containing the contentText
+            let contentElements = document.querySelectorAll('.d-flex .soft-text');
+            for (let elem of contentElements) {
+                if (elem.textContent.includes(contentText)) {
+                    // Find the parent module/submodule of the matched content
+                    let moduleElem = elem.closest('.card');
+
+                    // Use Bootstrap's API to show (expand) the target
+                    let bsCollapse = new bootstrap.Collapse(moduleElem.querySelector('.collapse'), {
+                        toggle: true
+                    });
+                    bsCollapse.show();
+
+                    // Exit the loop once we've found and expanded the module
+                    break;
+                }
+            }
+        }
+    });
+});
+
+    // Dark Mode Toggle Logic
+    document.getElementById('darkModeToggle').addEventListener('click', function() {
+        var lightIcon = document.querySelector('.light-icon');
+        var darkIcon = document.querySelector('.dark-icon');
+        
+        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
+            document.documentElement.removeAttribute('data-bs-theme');
+            lightIcon.style.display = "";
+            darkIcon.style.display = "none";
+        } else {
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            lightIcon.style.display = "none";
+            darkIcon.style.display = "";
+        }
+    });
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Check for OS dark mode setting
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            // Set the attribute on the <html> element
+            document.documentElement.setAttribute('data-bs-theme', 'dark');
+            
+            // Toggle the sun and moon icons
+            var lightIcon = document.querySelector('.light-icon');
+            var darkIcon = document.querySelector('.dark-icon');
+            lightIcon.style.display = "none";
+            darkIcon.style.display = "";
+        }
+    });
+    document.addEventListener('click', function(event) {
+        var searchContainer = document.querySelector('.search-container');
+        var dropdownResults = document.getElementById('live-search-results');
+    
+        // If the clicked target is neither the search container nor its descendants
+        if (!searchContainer.contains(event.target)) {
+            dropdownResults.classList.remove('show'); // hide the dropdown
+        }
     });
 </script>
 

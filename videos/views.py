@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import Module, SubModule, Topic, Video
-
+from django.http import JsonResponse
 import re
 import logging
 
@@ -41,6 +41,19 @@ def philosophy(request):
 def about(request):
         
         return render(request, 'about.html')
+    
+def search(request):
+    query = request.GET.get('q')
+    results = []
+
+    # Search Videos
+    videos = Video.objects.filter(title__icontains=query)
+    for video in videos:
+        results.append({'type': 'Video', 'title': video.title, 'url': video.url})
+
+    # Extend this for other models like Topic, CourseNote, etc.
+
+    return JsonResponse(results, safe=False)
 
 def extract_video_id_from_url(url):
     # Extract video ID from a YouTube URL using regex

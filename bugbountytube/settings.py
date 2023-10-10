@@ -49,6 +49,8 @@ INSTALLED_APPS = [
     'grappelli',
     'adminsortable2',
     'markdownx',
+    'challenges',
+    'resources',
 ]
 
 MIDDLEWARE = [

@@ -6,12 +6,27 @@
 <div class="text-center mb-5">
     <h1 class="display-4 soft-text">Practical Bug Bounty</h1>
     <p class="soft-text">A free video course from the community, for the community ❤️</p>
+    <div class="dropdown">
+        <!-- Search Container -->
+        <div class="search-container mx-auto" style="max-width: 600px;">
+            <div class="input-group mb-3">
+                <!-- Search Input -->
+                <input type="text" id="search-input" class="form-control rounded-pill" placeholder="Search for topics, videos, notes..." aria-label="Search" aria-describedby="search-icon">
+                <!-- Icon -->
+                <div class="input-group-append">
+                    <span class="input-group-text bg-transparent border-0" id="search-icon"><i class="bi bi-search"></i></span>
+                </div>
+            </div>
+            <!-- Live Search Dropdown -->
+            <div id="live-search-results" class="dropdown-menu" aria-labelledby="search-input"></div>
+        </div>
+    </div>
 </div>
 
 {% for module in modules %}
     <!-- Module -->
     <div class="card mb-5 shadow-lg rounded">
-        <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#module-{{ module.id }}" aria-expanded="false" aria-controls="module-{{ module.id }}" style="cursor:pointer;">
+        <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-bs-toggle="collapse" data-bs-target="#module-{{ module.id }}" aria-expanded="false" aria-controls="module-{{ module.id }}" style="cursor:pointer;">
             <h5 class="soft-text mb-0">
                 <i class="bi bi-folder-plus"></i> Module: {{ module.name }}
             </h5>
@@ -27,13 +42,13 @@
                                 <i class="bi bi-folder2-open"></i> {{ submodule.name }}
                             </span>
                             <div>
-                                <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#topics-{{ submodule.id }}" aria-expanded="false" aria-controls="topics-{{ submodule.id }}">
+                                <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#topics-{{ submodule.id }}" aria-expanded="false" aria-controls="topics-{{ submodule.id }}">
                                     <i class="bi bi-list"></i> View Topics
                                 </button>
-                                <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#notes-{{ submodule.id }}" aria-expanded="false" aria-controls="notes-{{ submodule.id }}">
+                                <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#notes-{{ submodule.id }}" aria-expanded="false" aria-controls="notes-{{ submodule.id }}">
                                     <i class="bi bi-book"></i> View Course Notes
                                 </button>
-                                <button class="btn btn-link text-dark" type="button" data-toggle="collapse" data-target="#links-{{ submodule.id }}" aria-expanded="false" aria-controls="links-{{ submodule.id }}">
+                                <button class="btn btn-link text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#links-{{ submodule.id }}" aria-expanded="false" aria-controls="links-{{ submodule.id }}">
                                     <i class="bi bi-link-45deg"></i> View Additional Links
                                 </button>
                             </div>
@@ -48,10 +63,10 @@
                                         <div class="d-flex justify-content-between align-items-center hover-bg p-2 rounded my-1">
                                             <span class="soft-text ml-2">{{ video.title }}</span>
                                             <div>
-                                                <button class="btn btn-outline-dark btn-sm" data-toggle="modal" data-target="#videoModal-{{ video.id }}">
+                                                <button class="btn btn-outline-dark btn-sm" data-bs-toggle="modal" data-bs-target="#videoModal-{{ video.id }}">
                                                     <i class="bi bi-play"></i> Watch
                                                 </button>
-                                                <button class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#detailsModal-{{ video.id }}">
+                                                <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#detailsModal-{{ video.id }}">
                                                     <i class="bi bi-info-circle"></i> Details
                                                 </button>
                                             </div>
@@ -78,7 +93,6 @@
                                 {% endfor %}
                             {% endfor %}
                         </div>
-
                     </li>
                 {% endfor %}
             </ul>
@@ -86,19 +100,17 @@
             <!-- Video Modals -->
     {% for submodule in module.submodules.all %}
     {% for topic in submodule.topics.all %}
-        {% for video in topic.videos.all %}
-            <div class="modal fade" id="videoModal-{{ video.id }}" tabindex="-1" role="dialog" aria-labelledby="videoModalLabel" aria-hidden="true">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="videoModalLabel">{{ video.title }}</h5>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <iframe width="100%" height="315" src="{{ video.url|embed_url }}" frameborder="0" allowfullscreen></iframe>
-                        </div>
+    {% for video in topic.videos.all %}
+        <div class="modal fade" id="videoModal-{{ video.id }}" tabindex="-1" aria-labelledby="videoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="videoModalLabel">{{ video.title }}</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <iframe width="100%" height="315" src="{{ video.url|embed_url }}" frameborder="0" allowfullscreen></iframe>
+                    </div>
                     </div>
                 </div>
             </div>
@@ -109,115 +121,185 @@
     </div>
 {% endfor %}
 
-    
-<div class="text-center mb-5">
-    <h2 class="display-5 soft-text">Suggest New Content</h2>
-    <p class="soft-text">Help us improve by suggesting videos or categories.</p>
-</div>
-
-<!-- Video Suggestion Form -->
-<div class="card mb-5 shadow-lg rounded">
-    <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#videoSuggestionForm" aria-expanded="false" aria-controls="videoSuggestionForm" style="cursor:pointer;">
-        <h5 class="soft-text mb-0">
-            <i class="bi bi-camera-video"></i> Suggest a Video  <!-- Added the video icon here -->
-        </h5>
-        <i class="bi bi-chevron-down arrow-icon"></i>
-    </div>
-    <div class="collapse" id="videoSuggestionForm">
-        <div class="card-body">
-            <form method="post" action="{% url 'index' %}">
-                <input type="hidden" name="video_suggestion" value="true">
-                {% csrf_token %}
-                
-                <!-- Video Title -->
-                <div class="form-group">
-                    <label for="videoTitle">Video Title</label>
-                    <input type="text" class="form-control" id="videoTitle" name="title" placeholder="Enter video title">
-                </div>
-                
-                <!-- Video URL -->
-                <div class="form-group">
-                    <label for="videoURL">Video URL</label>
-                    <input type="url" class="form-control" id="videoURL" name="url" placeholder="Enter video URL">
-                </div>
-                
-                <!-- Video Tags (Optional) -->
-                <div class="form-group">
-                    <label for="videoTags">Tags (comma separated)</label>
-                    <input type="text" class="form-control" id="videoTags" name="tags" placeholder="e.g. web security, xss">
-                </div>
-                
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-custom">Submit Video Suggestion</button>
-            </form>
-            
-        {% if feedback_message %}
-        <div class="alert alert-success mt-3">
-            {{ feedback_message }}
-        </div>
-        {% endif %}
-    </div>
-</div>
-</div>
-<!-- Category Suggestion Form -->
-<div class="card mb-5 shadow-lg rounded">
-    <div class="card-header soft-primary d-flex justify-content-between align-items-center" data-toggle="collapse" data-target="#categorySuggestionForm" aria-expanded="false" aria-controls="categorySuggestionForm" style="cursor:pointer;">
-        <h5 class="soft-text mb-0">
-            <i class="bi bi-folder-plus"></i> Suggest a Category  <!-- Added the folder icon here -->
-        </h5>
-        <i class="bi bi-chevron-down arrow-icon"></i>
-    </div>
-    <div class="collapse" id="categorySuggestionForm">
-        <div class="card-body"> 
-
-            <form method="post" action="{% url 'index' %}">
-                <input type="hidden" name="category_suggestion" value="true">
-                {% csrf_token %}
-                
-                <!-- Category Name -->
-                <div class="form-group">
-                    <label for="categoryName">Category Name</label>
-                    <input type="text" class="form-control" id="categoryName" name="name" placeholder="Enter category name">
-                </div>
-                
-                <!-- Category Description (Optional) -->
-                <div class="form-group">
-                    <label for="categoryDescription">Description</label>
-                    <textarea class="form-control" id="categoryDescription" name="description" rows="3" placeholder="Describe the category..."></textarea>
-                </div>
-            
-                <!-- Parent Category (Optional) -->
-                <div class="form-group">
-                    <label for="parentCategory">Parent Category</label>
-                    <select class="form-control" id="parentCategory" name="parent">
-                        <option value="">None</option>
-                        {% for category in categories %}
-                            <option value="{{ category.id }}">{{ category.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                
-                <!-- Submit Button -->
-                <button type="submit" class="btn btn-custom">Submit Category Suggestion</button>
-            </form>
-            
-        {% if feedback_message %}
-        <div class="alert alert-success mt-3">
-            {{ feedback_message }}
-        </div>
-        {% endif %}
-    </div>
-</div>
 <style>
-    .btn-custom {
-        background-color: #f8f9fa;  /* light background color */
-        border: 1px solid #ced4da;  /* gray border */
-        color: #495057;  /* dark text */
-        transition: all 0.3s ease;  /* smooth transition for hover effects */
+
+    html[data-bs-theme='dark'] .bg-light {
+        background-color: #242424 !important;
+        color: #ddd !important;
+    }
+    
+    /* Override `text-dark` for dark mode */
+    html[data-bs-theme='dark'] .text-dark {
+        color: #ddd !important;
+    }
+    /* Override `bg-white` for dark mode */
+    html[data-bs-theme='dark'] .bg-white {
+        background-color: #242424 !important;
+        color: #ddd !important;
+    }
+    
+    /* Adjust hover effect for dark mode */
+    html[data-bs-theme='dark'] .hover-bg:hover {
+        background-color: #343a40 !important;
+    }
+    
+    /* Override `btn-outline-dark` for dark mode */
+    html[data-bs-theme='dark'] .btn-outline-dark {
+        color: #f8f9fa !important;
+        border-color: #f8f9fa !important;
+    }
+    
+    html[data-bs-theme='dark'] .btn-outline-dark:hover {
+        color: #242424 !important;
+        background-color: #f8f9fa !important;
+        border-color: #f8f9fa !important;
+    }
+    
+    /* Override `btn-outline-info` for dark mode */
+    html[data-bs-theme='dark'] .btn-outline-info {
+        color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+    }
+    
+    html[data-bs-theme='dark'] .btn-outline-info:hover {
+        color: #242424 !important;
+        background-color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+    }
+    
+    /* Adjusting link colors in dark mode */
+    html[data-bs-theme='dark'] a.soft-text {
+        color: #81a1c1 !important;
+    }
+    /* Remove the underline from the btn-link globally */
+    .btn-link {
+        text-decoration: none !important;
     }
 
-    .btn-custom:hover {
-        background-color: #e9ecef;  /* slightly darker background on hover */
+    /* Adjust the color of the btn-link text and icons */
+    .btn-link.text-dark, .btn-link.text-dark i.bi {
+        color: #495057;  /* Default color for light mode */
+    }
+
+    .btn-link.text-dark:hover, .btn-link.text-dark:focus {
+        color: #343a40;  /* Adjust the hover/focus color as needed */
+        text-decoration: none !important;
+    }
+
+    /* For dark mode color adjustments */
+    html[data-bs-theme='dark'] .btn-link.text-dark, html[data-bs-theme='dark'] .btn-link.text-dark i.bi {
+        color: #f8f9fa !important;
+    }
+
+    html[data-bs-theme='dark'] .btn-link.text-dark:hover, html[data-bs-theme='dark'] .btn-link.text-dark:focus {
+        color: #81a1c1 !important;  /* Adjust the hover/focus color as needed for dark mode */
+    }
+
+    .navbar {
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-light .navbar-toggler-icon {
+        display: none; /* hides default icon */
+    }
+    
+    .navbar-light .navbar-toggler {
+        border: none;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    /* Navbar hover effects */
+    .navbar-nav .nav-link:hover {
+        color: #343a40 !important; /* adjust as needed */
+    }
+    
+    /* Dark Mode Adjustments */
+    html[data-bs-theme='dark'] .navbar-light {
+        background-color: #242424 !important;
+    }
+    
+    html[data-bs-theme='dark'] .navbar-light .navbar-brand,
+    html[data-bs-theme='dark'] .navbar-light .navbar-nav .nav-link {
+        color: #f8f9fa !important;
+    }
+    
+    /* Dark Mode Toggle Icon Adjustments */
+    html[data-bs-theme='dark'] .light-icon {
+        display: none;
+    }
+    
+    html[data-bs-theme='dark'] .dark-icon {
+        display: inline;
+    }
+    .centered-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .navbar {
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-light .navbar-toggler-icon {
+        display: none; /* hides default icon */
+    }
+    
+    .navbar-light .navbar-toggler {
+        border: none;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    .navbar-nav .nav-link {
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    
+    /* Navbar hover effects */
+    .navbar-nav .nav-link:hover {
+        color: #343a40 !important; /* adjust as needed */
+        transform: scale(1.1);
+    }
+    
+    /* Dark Mode Adjustments */
+    html[data-bs-theme='dark'] .navbar-light {
+        background-color: #242424 !important;
+    }
+    
+    html[data-bs-theme='dark'] .navbar-light .navbar-brand,
+    html[data-bs-theme='dark'] .navbar-light .navbar-nav .nav-link {
+        color: #f8f9fa !important;
+    }
+    
+    /* Dark Mode Toggle Icon Adjustments */
+    html[data-bs-theme='dark'] .light-icon {
+        display: none;
+    }
+    
+    html[data-bs-theme='dark'] .dark-icon {
+        display: inline;
+    }
+    .navbar-nav .nav-link:hover {
+        color: #81a1c1 !important;
+        transform: scale(1.1);
+    }
+
+    /* Adjust the dropdown arrow to reflect the state of the dropdown */
+    .navbar-collapse[aria-expanded="true"] .bi-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    /* Enhance the look of the buttons for clarity */
+    .btn {
+        transition: transform 0.3s ease;
+    }
+    .btn:hover {
+        transform: scale(1.1);
     }
 </style>
 
