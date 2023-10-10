@@ -13,7 +13,15 @@ def index(request):
         'modules': modules,
         'feedback_message': feedback_message
     })
+
+def challenges(request):
     
+    return render(request, 'challenges.html')
+
+def resources(request):
+        
+        return render(request, 'resources.html')    
+
 def contact(request):
     
     return render(request, 'contact.html')
@@ -22,11 +30,17 @@ def contribute(request):
     
     return render(request, 'contribute.html')
 
+def community(request):
+        
+        return render(request, 'community.html')
 
 def philosophy(request):
     
     return render(request, 'philosophy.html')
 
+def about(request):
+        
+        return render(request, 'about.html')
 
 def extract_video_id_from_url(url):
     # Extract video ID from a YouTube URL using regex
