@@ -1,100 +1,52 @@
 {% extends "base.html" %}
 
+{% load custom_filters %}
+
 {% block content %}
 
 <h1 class="mb-4">Resources</h1>
 
-<!-- Filter by Type Buttons -->
-<div class="mb-4">
-    {% for type, display_name in Resource.RESOURCE_TYPES %}
-        <button data-filter-type="{{ type }}" class="btn btn-outline-dark resource-filter">{{ display_name }}</button>
+<!-- Search and Tag Filter -->
+<div class="mb-4 d-flex justify-content-between">
+    <input type="text" class="form-control d-inline-block w-auto mr-3" placeholder="Search resources...">
+    
+    <!-- Tag Filtering -->
+    <div>
+        <strong>Filter by Tags:</strong>
+        {% for tag in tags %}
+            <a href="?tag={{ tag.name }}" class="badge text-dark bg-light mx-1 border rounded-pill">{{ tag.name }}</a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Tabs for Resource Types -->
+<ul class="nav nav-tabs mb-4">
+    {% for type, display_name in RESOURCE_TYPES %}
+    <li class="nav-item">
+        <a class="nav-link text-dark" data-bs-toggle="tab" href="#{{ type }}"><i class="{{ icons|get_item:type }} mr-2"></i>{{ display_name }}</a>
+    </li>
     {% endfor %}
-</div>
+</ul>
 
-<!-- Filter by Tag Buttons -->
-<div class="mb-4">
-    {% for tag in tags %}
-        <button data-filter-tag="{{ tag.name }}" class="btn btn-outline-secondary tag-filter">{{ tag.name }}</button>
-    {% endfor %}
-</div>
-
-<!-- Search Bar -->
-<div class="mb-4">
-    <input type="text" id="searchInput" class="form-control" placeholder="Search resources...">
-    <button id="searchButton" class="btn btn-dark mt-2">Search</button>
-</div>
-
-<!-- Display Resources -->
-<div class="row">
-    {% for resource in resources %}
-    <div class="col-md-4 mb-4">
-        <div class="card border-0 shadow-sm">
-            <div class="card-body">
-                <!-- Resource Type Icon -->
-                <div class="d-flex justify-content-between align-items-center mb-2">
-                    <h5 class="card-title">{{ resource.title }}</h5>
-                    <span>
-                        {% if resource.resource_type == 'blog_post' %}
-                            <i class="bi bi-journal-text" title="Blog Post"></i>
-                        {% elif resource.resource_type == 'github_repo' %}
-                            <i class="bi bi-github" title="GitHub Repository"></i>
-                        {% elif resource.resource_type == 'article' %}
-                            <i class="bi bi-file-earmark-text" title="Article"></i>
-                        {% elif resource.resource_type == 'video' %}
-                            <i class="bi bi-camera-video" title="Video"></i>
-                        {% endif %}
-                    </span>
+<!-- Tab Content -->
+<div class="tab-content">
+    {% for type, display_name in RESOURCE_TYPES %}
+    <div class="tab-pane fade" id="{{ type }}">
+        <ul class="list-group">
+            {% for resource in resources %}
+            {% if resource.resource_type == type %}
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong><a href="{{ resource.url }}" class="text-dark" target="_blank">{{ resource.title }}</a></strong><br>
+                    <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
                 </div>
-                
-                <p class="card-text">{{ resource.description|truncatechars:100 }}</p>
-                <a href="{{ resource.url }}" class="btn btn-dark rounded-pill" target="_blank">Visit Resource</a>
-            </div>
-        </div>
+                <span class="badge bg-light text-dark">{{ resource.author }}</span>
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
     </div>
     {% endfor %}
 </div>
-
-<!-- Pagination (if needed) -->
-<div class="mt-4">
-    <!-- Use Django's paginator here -->
-</div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const resourceFilters = document.querySelectorAll('.resource-filter');
-    const tagFilters = document.querySelectorAll('.tag-filter');
-    const searchButton = document.getElementById('searchButton');
-    const searchInput = document.getElementById('searchInput');
-
-    resourceFilters.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const filterValue = this.getAttribute('data-filter-type');
-            window.location.href = updateQueryStringParameter('resource_type', filterValue);
-        });
-    });
-
-    tagFilters.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const filterValue = this.getAttribute('data-filter-tag');
-            window.location.href = updateQueryStringParameter('tag', filterValue);
-        });
-    });
-
-    searchButton.addEventListener('click', function() {
-        const searchTerm = searchInput.value;
-        window.location.href = updateQueryStringParameter('search', searchTerm);
-    });
-
-    function updateQueryStringParameter(key, value) {
-        let url = window.location.href;
-        let regex = new RegExp("([?&])" + key + "=.*?(&|$)", "i");
-        let separator = url.indexOf('?') !== -1 ? "&" : "?";
-        if (url.match(regex)) {
-            return url.replace(regex, '$1' + key + "=" + value + '$2');
-        }
-        return url + separator + key + "=" + value;
-    }
-});
-</script>
 
 {% endblock %}
