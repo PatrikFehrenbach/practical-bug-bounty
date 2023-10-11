@@ -1,0 +1,178 @@
+    html[data-bs-theme='dark'] .bg-light {
+        background-color: #242424 !important;
+        color: #ddd !important;
+    }
+    
+    /* Override `text-dark` for dark mode */
+    html[data-bs-theme='dark'] .text-dark {
+        color: #ddd !important;
+    }
+    /* Override `bg-white` for dark mode */
+    html[data-bs-theme='dark'] .bg-white {
+        background-color: #242424 !important;
+        color: #ddd !important;
+    }
+    
+    /* Adjust hover effect for dark mode */
+    html[data-bs-theme='dark'] .hover-bg:hover {
+        background-color: #343a40 !important;
+    }
+    
+    /* Override `btn-outline-dark` for dark mode */
+    html[data-bs-theme='dark'] .btn-outline-dark {
+        color: #f8f9fa !important;
+        border-color: #f8f9fa !important;
+    }
+    
+    html[data-bs-theme='dark'] .btn-outline-dark:hover {
+        color: #242424 !important;
+        background-color: #f8f9fa !important;
+        border-color: #f8f9fa !important;
+    }
+    
+    /* Override `btn-outline-info` for dark mode */
+    html[data-bs-theme='dark'] .btn-outline-info {
+        color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+    }
+    
+    html[data-bs-theme='dark'] .btn-outline-info:hover {
+        color: #242424 !important;
+        background-color: #17a2b8 !important;
+        border-color: #17a2b8 !important;
+    }
+    
+    /* Adjusting link colors in dark mode */
+    html[data-bs-theme='dark'] a.soft-text {
+        color: #81a1c1 !important;
+    }
+    /* Remove the underline from the btn-link globally */
+    .btn-link {
+        text-decoration: none !important;
+    }
+
+    /* Adjust the color of the btn-link text and icons */
+    .btn-link.text-dark, .btn-link.text-dark i.bi {
+        color: #495057;  /* Default color for light mode */
+    }
+
+    .btn-link.text-dark:hover, .btn-link.text-dark:focus {
+        color: #343a40;  /* Adjust the hover/focus color as needed */
+        text-decoration: none !important;
+    }
+
+    /* For dark mode color adjustments */
+    html[data-bs-theme='dark'] .btn-link.text-dark, html[data-bs-theme='dark'] .btn-link.text-dark i.bi {
+        color: #f8f9fa !important;
+    }
+
+    html[data-bs-theme='dark'] .btn-link.text-dark:hover, html[data-bs-theme='dark'] .btn-link.text-dark:focus {
+        color: #81a1c1 !important;  /* Adjust the hover/focus color as needed for dark mode */
+    }
+
+    .navbar {
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-light .navbar-toggler-icon {
+        display: none; /* hides default icon */
+    }
+    
+    .navbar-light .navbar-toggler {
+        border: none;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    /* Navbar hover effects */
+    .navbar-nav .nav-link:hover {
+        color: #343a40 !important; /* adjust as needed */
+    }
+    
+    /* Dark Mode Adjustments */
+    html[data-bs-theme='dark'] .navbar-light {
+        background-color: #242424 !important;
+    }
+    
+    html[data-bs-theme='dark'] .navbar-light .navbar-brand,
+    html[data-bs-theme='dark'] .navbar-light .navbar-nav .nav-link {
+        color: #f8f9fa !important;
+    }
+    
+    /* Dark Mode Toggle Icon Adjustments */
+    html[data-bs-theme='dark'] .light-icon {
+        display: none;
+    }
+    
+    html[data-bs-theme='dark'] .dark-icon {
+        display: inline;
+    }
+    .centered-navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .navbar {
+        transition: all 0.3s ease;
+    }
+    
+    .navbar-light .navbar-toggler-icon {
+        display: none; /* hides default icon */
+    }
+    
+    .navbar-light .navbar-toggler {
+        border: none;
+    }
+    
+    .cursor-pointer {
+        cursor: pointer;
+    }
+    
+    .navbar-nav .nav-link {
+        transition: color 0.3s ease, transform 0.3s ease;
+    }
+    
+    /* Navbar hover effects */
+    .navbar-nav .nav-link:hover {
+        color: #343a40 !important; /* adjust as needed */
+        transform: scale(1.1);
+    }
+    
+    /* Dark Mode Adjustments */
+    html[data-bs-theme='dark'] .navbar-light {
+        background-color: #242424 !important;
+    }
+    
+    html[data-bs-theme='dark'] .navbar-light .navbar-brand,
+    html[data-bs-theme='dark'] .navbar-light .navbar-nav .nav-link {
+        color: #f8f9fa !important;
+    }
+    
+    /* Dark Mode Toggle Icon Adjustments */
+    html[data-bs-theme='dark'] .light-icon {
+        display: none;
+    }
+    
+    html[data-bs-theme='dark'] .dark-icon {
+        display: inline;
+    }
+    .navbar-nav .nav-link:hover {
+        color: #81a1c1 !important;
+        transform: scale(1.1);
+    }
+
+    /* Adjust the dropdown arrow to reflect the state of the dropdown */
+    .navbar-collapse[aria-expanded="true"] .bi-chevron-down {
+        transform: rotate(180deg);
+    }
+
+    /* Enhance the look of the buttons for clarity */
+    .btn {
+        transition: transform 0.3s ease;
+    }
+    .btn:hover {
+        transform: scale(1.1);
+    }
