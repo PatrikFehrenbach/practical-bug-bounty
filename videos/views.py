@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .models import Module, SubModule, Topic, Video
 from django.http import JsonResponse
+from challenges.models import ChallengePlatform
 import re
 import logging
 
@@ -19,8 +20,8 @@ def privacy(request):
         return render(request, 'privacy.html')
 
 def challenges(request):
-    
-    return render(request, 'challenges.html')
+    all_challenges = ChallengePlatform.objects.filter(is_active=True)
+    return render(request, 'challenges.html', {'challenges': all_challenges})
 
 def resources(request):
         

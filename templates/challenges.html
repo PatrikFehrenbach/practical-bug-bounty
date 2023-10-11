@@ -2,6 +2,44 @@
 
 {% block content %}
 
-<h1>Challenges</h1>
+<h1 class="mb-5">Challenges (CTF)</h1>
+
+<div class="row">
+    {% for challenge in challenges %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 border-0 shadow-sm hover-shadow-lg">
+            <div class="card-body">
+                <h5 class="card-title font-weight-bold">{{ challenge.name }}</h5>
+                <p class="card-text">{{ challenge.description|truncatechars:100 }}</p>
+                <ul class="list-unstyled mt-4">
+                    <li class="mb-2">
+                        {% if challenge.difficulty_level == 'Beginner' %}
+                            <i class="bi bi-gear text-muted mr-2"></i>
+                        {% elif challenge.difficulty_level == 'Intermediate' %}
+                            <i class="bi bi-gears text-muted mr-2"></i>
+                        {% else %}
+                            <i class="bi bi-tools text-muted mr-2"></i>
+                        {% endif %}
+                        <span class="font-weight-bold">{{ challenge.difficulty_level }}</span>
+                    </li>
+                    <li>
+                        {% if challenge.payment_status == 'Paid' %}
+                            <i class="bi bi-wallet text-muted mr-2"></i>
+                        {% elif challenge.payment_status == 'Unpaid' %}
+                            <i class="bi bi-wallet2 text-muted mr-2"></i>
+                        {% else %}
+                            <i class="bi bi-cash-stack text-muted mr-2"></i>
+                        {% endif %}
+                        <span class="font-weight-bold">{{ challenge.payment_status }}</span>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-footer bg-transparent border-0">
+                <a href="{{ challenge.url }}" class="btn btn-dark rounded-pill" target="_blank">Visit Platform <i class="bi bi-arrow-right ml-2"></i></a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
