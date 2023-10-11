@@ -176,3 +176,33 @@
     .btn:hover {
         transform: scale(1.1);
     }
+    .footer {
+        background-color: #f9f9f9; /* Light gray for subtle differentiation */
+        border-top: 1px solid #eaeaea; /* A subtle line to separate footer from main content */
+        padding: 20px 0; /* Padding top and bottom */
+    }
+    
+    .footer a, .footer i {
+        color: #333; /* Dark gray for text and icons */
+        transition: color 0.2s; /* Transition effect for hover */
+    }
+    
+    .footer a:hover {
+        color: #555; /* Darker gray on hover */
+    }
+    
+    .footer .social-icons a {
+        font-size: 20px; /* Icon size */
+        margin: 0 15px; /* Spacing between icons */
+        text-decoration: none; /* Remove underlines */
+    }
+    
+    .footer .footer-links a {
+        margin: 0 15px; /* Spacing between links */
+        text-decoration: none; /* Remove underlines */
+    }
+    
+    .footer .back-to-top {
+        margin-top: 10px; /* Space above the back to top link */
+    }
+    

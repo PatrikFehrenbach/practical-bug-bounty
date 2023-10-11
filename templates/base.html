@@ -14,16 +14,16 @@
     <!-- Bootstrap Icons -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
-<body>
-<!-- Enhanced Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light soft-primary shadow-sm">
+<body class="d-flex flex-column min-vh-100"> <!-- Add flexbox classes here -->
+    <!-- Enhanced Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light soft-primary shadow-sm py-3">
     <div class="container-fluid d-flex justify-content-center">
         <a class="navbar-brand soft-text" href="/">Practical Bug Bounty</a>
         
-        <!-- Navbar Toggler for Mobile -->
         <button class="navbar-toggler soft-text" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+
         
         <!-- Navbar Menu Items -->
         <div class="collapse navbar-collapse" id="navbarNav">
@@ -56,20 +56,63 @@
                 </li>
             </ul>
             
-            <!-- Dark Mode Toggle on the right -->
-            <span id="darkModeToggle" class="navbar-text cursor-pointer">
-                <i class="bi bi-sun light-icon"></i>
-                <i class="bi bi-moon-fill dark-icon" style="display: none;"></i>
-            </span>
-        </div>
+                <!-- Dark Mode Toggle on the right -->
+                <span id="darkModeToggle" class="navbar-text cursor-pointer ms-3">
+                    <i class="bi bi-sun light-icon"></i>
+                    <i class="bi bi-moon-fill dark-icon" style="display: none;"></i>
+                </span>
+            </div>
     </div>
 </nav>
 
 <!-- Main Content -->
-<div class="container mt-5">
+<div class="container mt-5 flex-grow-1"> <!-- Make this div expand -->
     {% block content %}
     {% endblock content %}
 </div>
+<!-- Footer -->
+<style>
+    .footer-link {
+        text-decoration: none;
+    }
+    .footer-link:hover {
+        text-decoration: underline;
+    }
+</style>
+
+<!-- Footer -->
+<footer class="bg-light text-center text-dark">
+    <!-- Grid container -->
+    <div class="container p-2">
+        <!-- Section: Social media -->
+        <section class="mb-2">
+            <!-- Twitter -->
+            <a class="btn btn-outline-dark btn-floating m-1" href="#!" role="button"><i class="bi bi-twitter"></i></a>
+
+            <!-- Github -->
+            <a class="btn btn-outline-dark btn-floating m-1" href="#!" role="button"><i class="bi bi-github"></i></a>
+
+            <!-- Discord -->
+            <a class="btn btn-outline-dark btn-floating m-1" href="#!" role="button"><i class="bi bi-discord"></i></a>
+        </section>
+
+        <!-- Additional links -->
+        <section class="mb-2">
+            <a class="text-dark mx-2 footer-link" href="#!">Imprint</a>
+            <a class="text-dark mx-2 footer-link" href="#!">Privacy</a>
+        </section>
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-1" style="background-color: rgba(0, 0, 0, 0.05);">
+        Made with ❤️ 
+    </div>
+</footer>
+
+
+
+
 
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
