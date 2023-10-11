@@ -4,14 +4,28 @@
 
 <h1 class="mb-5">Challenges (CTF)</h1>
 
+<!-- Filter Buttons -->
+<div class="mb-4">
+    <button class="btn btn-outline-dark btn-filter" data-filter="Paid"><i class="bi bi-wallet"></i> Paid</button>
+    <button class="btn btn-outline-dark btn-filter" data-filter="Unpaid"><i class="bi bi-wallet2"></i> Unpaid</button>
+    <button class="btn btn-outline-dark btn-filter" data-filter="Both"><i class="bi bi-cash-stack"></i> Both</button>
+    <button class="btn btn-outline-secondary btn-filter" data-filter="All">All</button>
+</div>
+
 <div class="row">
     {% for challenge in challenges %}
-    <div class="col-md-4 mb-4">
+    <div class="col-md-4 mb-4 challenge-card" data-payment="{{ challenge.payment_status }}">
         <div class="card h-100 border-0 shadow-sm hover-shadow-lg">
+            
+            <!-- Card Header -->
+            <div class="card-header bg-dark text-white">
+                {{ challenge.name }}
+            </div>
+
+            <!-- Card Body -->
             <div class="card-body">
-                <h5 class="card-title font-weight-bold">{{ challenge.name }}</h5>
-                <p class="card-text">{{ challenge.description|truncatechars:100 }}</p>
-                <ul class="list-unstyled mt-4">
+                <p class="card-text mb-4">{{ challenge.description|truncatechars:100 }}</p>
+                <ul class="list-unstyled">
                     <li class="mb-2">
                         {% if challenge.difficulty_level == 'Beginner' %}
                             <i class="bi bi-gear text-muted mr-2"></i>
@@ -34,12 +48,44 @@
                     </li>
                 </ul>
             </div>
-            <div class="card-footer bg-transparent border-0">
+            
+            <!-- Card Footer -->
+            <div class="card-footer bg-transparent border-0 text-center">
                 <a href="{{ challenge.url }}" class="btn btn-dark rounded-pill" target="_blank">Visit Platform <i class="bi bi-arrow-right ml-2"></i></a>
             </div>
         </div>
     </div>
     {% endfor %}
 </div>
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const filterButtons = document.querySelectorAll('.btn-filter');
+        const challengeCards = document.querySelectorAll('.challenge-card');
+    
+        console.log('Number of filter buttons:', filterButtons.length);
+        console.log('Number of challenge cards:', challengeCards.length);
+    
+        filterButtons.forEach(btn => {
+            btn.addEventListener('click', function() {
+                console.log('Filter button clicked:', this.getAttribute('data-filter'));
+                
+                const filterValue = this.getAttribute('data-filter');
+    
+                challengeCards.forEach(card => {
+                    if (filterValue === 'All' || card.getAttribute('data-payment') === filterValue) {
+                        card.style.display = 'block'; // show the card
+                    } else {
+                        card.style.display = 'none';  // hide the card
+                    }
+                });
+            });
+        });
+    });
+    
+    
+    
+</script>
 
 {% endblock %}
