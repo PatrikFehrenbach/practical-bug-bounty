@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('videos.urls')),
     path('', include('challenges.urls')),
+    path('', include('resources.urls')),
     path('grappelli/', include('grappelli.urls')), # grappelli URLS
     path('markdownx/', include('markdownx.urls')),
 ]

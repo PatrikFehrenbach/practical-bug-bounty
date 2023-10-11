@@ -19,10 +19,6 @@ def privacy(request):
         return render(request, 'privacy.html')
 
 
-def resources(request):
-        
-        return render(request, 'resources.html')    
-
 def contact(request):
     
     return render(request, 'contact.html')
