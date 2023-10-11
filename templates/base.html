@@ -1,4 +1,8 @@
 <!DOCTYPE html>
+{% load static %}
+<link rel="stylesheet" href="{% static 'css/styles.css' %}">
+<script src="{% static 'js/scripts.js' %}"></script>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -8,7 +12,7 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <!-- Bootstrap Icons -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
 </head>
 <body>
 <!-- Enhanced Navbar -->
@@ -70,128 +74,6 @@
 <!-- Bootstrap 5 JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var modals = document.querySelectorAll('.modal');
-        modals.forEach(function(modal) {
-            modal.addEventListener('hidden.bs.modal', function(e) {
-                var iframe = modal.querySelector('iframe');
-                iframe.src = iframe.src;
-            });
-        });
-        
-        var searchInput = document.getElementById('search-input');
-        if (searchInput) {
-            searchInput.addEventListener('keyup', function() {
-                var query = this.value;
-                if (query.length > 2) {
-                    fetch('/search/?q=' + query)
-                        .then(response => response.json())
-                        .then(data => displayResults(data))
-                        .catch(error => console.error('Error fetching search results:', error));
-                }
-            });
-        }
-    });
-
-    function displayResults(data) {
-        var resultsDiv = document.getElementById('live-search-results');
-        while (resultsDiv.firstChild) {
-            resultsDiv.removeChild(resultsDiv.firstChild);
-        }
-    
-        if (data.length === 0) {
-            var p = document.createElement('p');
-            p.textContent = 'No results found.';
-            resultsDiv.appendChild(p);
-        } else {
-            data.forEach(function(item) {
-                var a = document.createElement('a');
-                a.href = item.url;
-                a.classList.add('dropdown-item');
-                a.classList.add('search-result');  // Add the search-result class to identify this as a search result
-                a.setAttribute('data-content-text', item.title);  // Add the unique identifier or title
-                a.textContent = item.title;
-                resultsDiv.appendChild(a);
-            });
-        }
-    
-        if (data.length > 0) {
-            var dropdown = new bootstrap.Dropdown(resultsDiv.parentElement);
-            dropdown.show();
-        }
-    };
-    
-    
-// Event listener for search results
-document.addEventListener('DOMContentLoaded', function() {
-    document.body.addEventListener('click', function(e) {
-        if (e.target.classList.contains('search-result')) {
-            e.preventDefault(); // Prevent default action
-
-            // Extract content text from the clicked search result
-            let contentText = e.target.getAttribute('data-content-text');
-
-            // Search for elements containing the contentText
-            let contentElements = document.querySelectorAll('.d-flex .soft-text');
-            for (let elem of contentElements) {
-                if (elem.textContent.includes(contentText)) {
-                    // Find the parent module/submodule of the matched content
-                    let moduleElem = elem.closest('.card');
-
-                    // Use Bootstrap's API to show (expand) the target
-                    let bsCollapse = new bootstrap.Collapse(moduleElem.querySelector('.collapse'), {
-                        toggle: true
-                    });
-                    bsCollapse.show();
-
-                    // Exit the loop once we've found and expanded the module
-                    break;
-                }
-            }
-        }
-    });
-});
-
-    // Dark Mode Toggle Logic
-    document.getElementById('darkModeToggle').addEventListener('click', function() {
-        var lightIcon = document.querySelector('.light-icon');
-        var darkIcon = document.querySelector('.dark-icon');
-        
-        if (document.documentElement.getAttribute('data-bs-theme') === 'dark') {
-            document.documentElement.removeAttribute('data-bs-theme');
-            lightIcon.style.display = "";
-            darkIcon.style.display = "none";
-        } else {
-            document.documentElement.setAttribute('data-bs-theme', 'dark');
-            lightIcon.style.display = "none";
-            darkIcon.style.display = "";
-        }
-    });
-
-    document.addEventListener('DOMContentLoaded', function() {
-        // Check for OS dark mode setting
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            // Set the attribute on the <html> element
-            document.documentElement.setAttribute('data-bs-theme', 'dark');
-            
-            // Toggle the sun and moon icons
-            var lightIcon = document.querySelector('.light-icon');
-            var darkIcon = document.querySelector('.dark-icon');
-            lightIcon.style.display = "none";
-            darkIcon.style.display = "";
-        }
-    });
-    document.addEventListener('click', function(event) {
-        var searchContainer = document.querySelector('.search-container');
-        var dropdownResults = document.getElementById('live-search-results');
-    
-        // If the clicked target is neither the search container nor its descendants
-        if (!searchContainer.contains(event.target)) {
-            dropdownResults.classList.remove('show'); // hide the dropdown
-        }
-    });
-</script>
 
 </body>
 </html>

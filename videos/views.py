@@ -14,6 +14,10 @@ def index(request):
         'feedback_message': feedback_message
     })
 
+def privacy(request):
+        
+        return render(request, 'privacy.html')
+
 def challenges(request):
     
     return render(request, 'challenges.html')

@@ -10,6 +10,7 @@ urlpatterns = [
     path('resources/', views.resources, name='resources'),
     path('challenges/', views.challenges, name='challenges'),
     path('search/', views.search, name='search'),
+    path('privacy/', views.privacy, name='privacy'),
 
 #    path('category/<int:category_id>/', views.category_videos, name='category_videos'),
 
