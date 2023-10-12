@@ -10,6 +10,11 @@ def resources(request):
     # Fetch all resources initially
     resource_list = Resource.objects.all()
 
+    # Filter by resource_type if provided
+    resource_type = request.GET.get('resource_type')
+    if resource_type:
+        resource_list = resource_list.filter(resource_type=resource_type)
+
     # Filter by tag if provided
     tag_name = request.GET.get('tag')
     if tag_name:
@@ -46,3 +51,4 @@ def resources(request):
     }
 
     return render(request, 'resources.html', context)
+
