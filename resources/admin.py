@@ -3,7 +3,9 @@ from django.urls import path
 from django.shortcuts import render, redirect
 from .models import Resource, Tag
 import requests
-import os 
+import os
+from threading import Thread
+
 ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
 
 # Admin for the Tag model
@@ -21,7 +23,6 @@ class ResourceAdmin(admin.ModelAdmin):
     ordering = ('-added_date',)
     date_hierarchy = 'added_date'
     filter_horizontal = ('tags',)
-    # change_list_template = "admin/resources_changelist.html"
 
     def get_urls(self):
         urls = super().get_urls()
@@ -31,43 +32,38 @@ class ResourceAdmin(admin.ModelAdmin):
         return custom_urls + urls
 
     def import_github(self, request):
-        print("Entered import_github method")
-
         if request.method == "POST":
             repo_urls = request.POST.get('repo_urls').splitlines()
-            print(f"Received the following repo URLs: {repo_urls}")
 
-            for repo_url in repo_urls:
-                print(f"Processing {repo_url}")
-                details = fetch_github_repo_details(repo_url.strip())
-                if details and details.get('title'):  
-                    print(f"Details fetched for {repo_url}: {details}")
-                    existing_resource = Resource.objects.filter(title=details['title']).first()
-                    if not existing_resource:
-                        resource = Resource(
-                            resource_type='github_repo',
-                            title=details['title'],
-                            description=details.get('description') or '',  # Updated this line
-                            url=details.get('url', ''),  # Default to empty string if missing
-                            author=details.get('author', ''),  # Default to empty string if missing
-                        )
-                        resource.save()
-                        print(f"Saved new resource for {repo_url}")
+            # Start the background task in a separate thread
+            thread = Thread(target=self.import_github_thread, args=(repo_urls,))
+            thread.start()
 
-                        # Process tags
-                        for topic in details['tags']:
-                            tag, created = Tag.objects.get_or_create(name=topic)
-                            resource.tags.add(tag)
-                        resource.save()
-                        print(f"Tags added for {repo_url}")
-                    else:
-                        print(f"Resource with title '{details['title']}' already exists. Skipping...")
             return redirect("..")
         return render(request, "admin/import_github.html")
 
+    def import_github_thread(self, repo_urls):
+        for repo_url in repo_urls:
+            details = fetch_github_repo_details(repo_url.strip())
+            if details and details.get('title'):
+                existing_resource = Resource.objects.filter(title=details['title']).first()
+                if not existing_resource:
+                    resource = Resource(
+                        resource_type='github_repo',
+                        title=details['title'],
+                        description=details.get('description') or '',
+                        url=details.get('url', ''),
+                        author=details.get('author', ''),
+                    )
+                    resource.save()
+
+                    # Process tags
+                    for topic in details['tags']:
+                        tag, created = Tag.objects.get_or_create(name=topic)
+                        resource.tags.add(tag)
+                    resource.save()
+
 def fetch_github_repo_details(repo_url):
-    print(f"Fetching details for {repo_url}")
-    # Extract owner and repo name from URL
     parts = repo_url.split('/')
     owner = parts[-2]
     repo_name = parts[-1]
@@ -80,17 +76,15 @@ def fetch_github_repo_details(repo_url):
     # Fetch repo details using GitHub API
     try:
         api_url = f"https://api.github.com/repos/{owner}/{repo_name}"
-        response = requests.get(api_url, headers=headers)  # Add headers here
+        response = requests.get(api_url, headers=headers)
         data = response.json()
     except Exception as e:
-        print(f"An error occurred while fetching repo details: {e}")
         return None
 
     # Fetch topics (tags) associated with the repo
     topics_response = requests.get(api_url + "/topics", headers=headers)
     topics = topics_response.json().get('names', [])
 
-    print(f"Details fetched for {repo_url}: {data}")
     return {
         'title': data.get('name'),
         'description': data.get('description'),
