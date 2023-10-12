@@ -6,47 +6,89 @@
 
 <h1 class="mb-4">Resources</h1>
 
-<!-- Search and Tag Filter -->
-<div class="mb-4 d-flex justify-content-between">
-    <input type="text" class="form-control d-inline-block w-auto mr-3" placeholder="Search resources...">
-    
-    <!-- Tag Filtering -->
-    <div>
-        <strong>Filter by Tags:</strong>
-        {% for tag in tags %}
-            <a href="?tag={{ tag.name }}" class="badge text-dark bg-light mx-1 border rounded-pill">{{ tag.name }}</a>
+<!-- Tag Bubbles -->
+<div class="mb-4">
+    <strong>Tags:</strong>
+    <div class="d-flex flex-wrap align-items-center mt-2">
+        {% for tag, count in tags_with_count|slice:":10" %}
+            <a href="?tag={{ tag }}" class="btn btn-sm btn-outline-dark mx-1 my-1">
+                {{ tag }} <span class="badge bg-dark">{{ count }}</span>
+            </a>
         {% endfor %}
+        {% if tags_with_count|length > 10 %}
+            <a href="#" id="toggleTags" class="btn btn-sm btn-outline-dark mx-1 my-1">
+                <i class="bi bi-arrow-down-up"></i>
+            </a>
+        {% endif %}
+    </div>
+
+    <div class="all-tags mt-3" style="display:none;">
+        <div class="d-flex flex-wrap align-items-center">
+            {% for tag, count in tags_with_count|slice:"10:" %}
+                <a href="?tag={{ tag }}" class="btn btn-sm btn-outline-secondary mx-1 my-1">
+                    {{ tag }} <span class="badge bg-secondary">{{ count }}</span>
+                </a>
+            {% endfor %}
+        </div>
     </div>
 </div>
 
-<!-- Tabs for Resource Types -->
-<ul class="nav nav-tabs mb-4">
-    {% for type, display_name in RESOURCE_TYPES %}
-    <li class="nav-item">
-        <a class="nav-link text-dark" data-bs-toggle="tab" href="#{{ type }}"><i class="{{ icons|get_item:type }} mr-2"></i>{{ display_name }}</a>
+
+<!-- Displaying Resources -->
+<ul class="list-group mb-4">
+    {% for resource in resources.object_list %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        <div>
+            {% if resource.resource_type == 'github_repo' %}
+                <i class="bi bi-github mr-2"></i>
+            {% endif %}
+            <strong><a href="{{ resource.url }}" class="text-dark" target="_blank">{{ resource.title }}</a></strong><br>
+            <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
+        </div>
+        <span class="badge rounded-pill bg-light text-dark">{{ resource.author }}</span>
     </li>
     {% endfor %}
 </ul>
 
-<!-- Tab Content -->
-<div class="tab-content">
-    {% for type, display_name in RESOURCE_TYPES %}
-    <div class="tab-pane fade" id="{{ type }}">
-        <ul class="list-group">
-            {% for resource in resources %}
-            {% if resource.resource_type == type %}
-            <li class="list-group-item d-flex justify-content-between align-items-center">
-                <div>
-                    <strong><a href="{{ resource.url }}" class="text-dark" target="_blank">{{ resource.title }}</a></strong><br>
-                    <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
-                </div>
-                <span class="badge bg-light text-dark">{{ resource.author }}</span>
-            </li>
-            {% endif %}
-            {% endfor %}
-        </ul>
-    </div>
-    {% endfor %}
-</div>
+<!-- Pagination Controls -->
+<nav aria-label="Resource navigation" class="mt-4">
+    <ul class="pagination justify-content-center">
+        {% if resources.has_previous %}
+        <li class="page-item">
+            <a class="page-link text-dark bg-light" href="?page={{ resources.previous_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" aria-label="Previous">
+                <i class="bi bi-chevron-left"></i>
+            </a>
+        </li>
+        {% endif %}
+        {% for i in resources.paginator.page_range %}
+        <li class="page-item {% if resources.number == i %}active{% endif %}">
+            <a class="page-link text-dark bg-light" href="?page={{ i }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">{{ i }}</a>
+        </li>
+        {% endfor %}
+        {% if resources.has_next %}
+        <li class="page-item">
+            <a class="page-link text-dark bg-light" href="?page={{ resources.next_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" aria-label="Next">
+                <i class="bi bi-chevron-right"></i>
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+<!-- Script for Toggle Tags Functionality -->
+<script>
+document.getElementById("toggleTags").addEventListener("click", function(event) {
+    event.preventDefault();
+    var allTags = document.querySelector(".all-tags");
+    var toggleIcon = document.getElementById("toggleTags").querySelector("i");
+    if (allTags.style.display === "none" || allTags.style.display === "") {
+        allTags.style.display = "block";
+        toggleIcon.className = "bi bi-chevron-up";
+    } else {
+        allTags.style.display = "none";
+        toggleIcon.className = "bi bi-chevron-down";
+    }
+});
+</script>
 
 {% endblock %}

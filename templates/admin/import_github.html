@@ -1,0 +1,12 @@
+{% extends "admin/base.html" %}
+{% load static %}
+
+{% block content %}
+<h1>Import from GitHub</h1>
+
+<form method="post">
+    {% csrf_token %}
+    <textarea name="repo_urls" rows="10" cols="50" placeholder="Enter each repository URL on a new line"></textarea><br><br>
+    <input type="submit" value="Import">
+</form>
+{% endblock %}
