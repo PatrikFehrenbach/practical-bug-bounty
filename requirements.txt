@@ -7,3 +7,4 @@ whitenoise
 psycopg2
 dj-database-url
 requests
+sentry-sdk[django]
