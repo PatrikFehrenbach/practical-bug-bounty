@@ -64,6 +64,7 @@ INSTALLED_APPS = [
     'challenges',
     'resources',
     'whitenoise.runserver_nostatic',
+    'django_select2'
 ]
 
 MIDDLEWARE = [

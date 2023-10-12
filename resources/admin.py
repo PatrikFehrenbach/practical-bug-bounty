@@ -2,9 +2,11 @@ from django.contrib import admin
 from django.urls import path
 from django.shortcuts import render, redirect
 from .models import Resource, Tag
+from .forms import ImportMediumForm
 import requests
 import os
 from threading import Thread
+
 
 ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
 
@@ -86,8 +88,9 @@ class MediumImportMixin:
 
             return redirect("..")
 
-        tags = Tag.objects.all()
-        return render(request, "admin/import_medium.html", {'tags': tags})
+        form = ImportMediumForm()
+        return render(request, "admin/import_medium.html", {'form': form})
+
 
 
     def get_medium_urls(self):

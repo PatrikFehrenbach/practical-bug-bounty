@@ -1,22 +1,37 @@
 {% extends "admin/base_site.html" %}
 
+{% block extrahead %}
+    {{ form.media }}
+    <!-- Include Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
     <h1>Import Medium Articles</h1>
     <form method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="article_urls">Medium Article URLs (One per line):</label>
-            <textarea class="form-control" id="article_urls" name="article_urls" rows="10"></textarea>
+            {{ form.article_urls.label_tag }}: {{ form.article_urls }}
         </div>
         <div class="form-group">
-            <label for="tag">Tag for these Articles:</label>
-            <select name="tags" multiple="multiple" class="form-control" required>
-                {% for tag in tags %}
-                <option value="{{ tag.id }}">{{ tag.name }}</option>
-                {% endfor %}
-            </select>
-            
+            {{ form.tags.label_tag }}: {{ form.tags }}
         </div>
         <button type="submit" class="btn btn-primary">Import</button>
     </form>
+{% endblock %}
+
+{% block extrascript %}
+    <!-- Include Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Add class to the tags dropdown
+            $('select[name="tags"]').addClass('select2-multiple');
+            
+            // Initialize Select2
+            $('.select2-multiple').select2({
+                closeOnSelect: false
+            });
+        });
+    </script>
 {% endblock %}
