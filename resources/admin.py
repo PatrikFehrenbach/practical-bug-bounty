@@ -63,14 +63,14 @@ class MediumImportMixin:
     def import_medium(self, request):
         if request.method == "POST":
             article_urls = request.POST.get('article_urls').splitlines()
-            tag_id = request.POST.get('tag')
-            tag = Tag.objects.get(id=tag_id)
+            tag_ids = request.POST.getlist('tags')  # Get all selected tag IDs
+            tags = Tag.objects.filter(id__in=tag_ids)  # Fetch all selected tags
 
             for url in article_urls:
                 parts = url.split('/')
                 author = parts[-2][1:]  # Remove '@' from the username
                 raw_title = parts[-1]
-                title = self.format_medium_title(raw_title)
+                title = self.format_medium_title(raw_title)  # Note the 'self.' here
                 resource = Resource(
                     resource_type='article',
                     title=title,
@@ -79,7 +79,7 @@ class MediumImportMixin:
                 )
                 try:
                     resource.save()
-                    resource.tags.add(tag)
+                    resource.tags.set(tags)  # Set multiple tags
                 except Exception as e:
                     print(e)
                     continue
@@ -88,6 +88,7 @@ class MediumImportMixin:
 
         tags = Tag.objects.all()
         return render(request, "admin/import_medium.html", {'tags': tags})
+
 
     def get_medium_urls(self):
         return [
