@@ -12,9 +12,10 @@
     <div class="d-flex flex-wrap align-items-center mt-2">
         {% for type, display_name in RESOURCE_TYPES %}
         <a href="?resource_type={{ type }}" class="btn btn-sm {% if resource_type == type %}btn-dark{% else %}btn-outline-dark{% endif %} mx-1 my-1">
-            <i class="{{ icons[type] }} mr-1"></i> {{ display_name }}
+            <i class="{{ icons|get_icon:type }} mr-1"></i> {{ display_name }}
         </a>
-    {% endfor %}    
+    {% endfor %}
+    
     </div>
 </div>
 
