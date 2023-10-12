@@ -45,6 +45,7 @@ def resources(request):
     context = {
         'resources': page_obj,  # Update this to pass the paginated resources
         'tags_with_count': tags_with_count,  # Pass tags with their count
+        'resource_type': resource_type,  # Pass the selected resource type
         'tag_name': tag_name,  # Pass the selected tag for retaining the filter during pagination
         'RESOURCE_TYPES': Resource.RESOURCE_TYPES,
         'icons': icons

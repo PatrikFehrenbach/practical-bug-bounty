@@ -11,10 +11,10 @@
     <strong>Resource Types:</strong>
     <div class="d-flex flex-wrap align-items-center mt-2">
         {% for type, display_name in RESOURCE_TYPES %}
-            <a href="?resource_type={{ type }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" class="btn btn-sm btn-outline-dark mx-1 my-1">
-                <i class="{{ icons|get_icon:type }} mr-1"></i>{{ display_name }}
-            </a>
-        {% endfor %}
+        <a href="?resource_type={{ type }}" class="btn btn-sm {% if resource_type == type %}btn-dark{% else %}btn-outline-dark{% endif %} mx-1 my-1">
+            <i class="{{ icons[type] }} mr-1"></i> {{ display_name }}
+        </a>
+    {% endfor %}    
     </div>
 </div>
 
@@ -26,10 +26,11 @@
     <strong>Tags:</strong>
     <div class="d-flex flex-wrap align-items-center mt-2">
         {% for tag, count in tags_with_count|slice:":10" %}
-            <a href="?tag={{ tag }}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}" class="btn btn-sm btn-outline-dark mx-1 my-1">
-                {{ tag }} <span class="badge bg-dark">{{ count }}</span>
-            </a>
-        {% endfor %}
+        <a href="?tag={{ tag }}" class="btn btn-sm {% if tag_name == tag %}btn-dark{% else %}btn-outline-dark{% endif %} mx-1 my-1">
+            {{ tag }} <span class="badge bg-dark">{{ count }}</span>
+        </a>
+    {% endfor %}
+    
         {% if tags_with_count|length > 10 %}
             <a href="#" id="toggleTags" class="btn btn-sm btn-outline-dark mx-1 my-1">
                 <i class="bi bi-arrow-down-up"></i>
