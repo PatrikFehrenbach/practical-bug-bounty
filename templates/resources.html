@@ -6,12 +6,27 @@
 
 <h1 class="mb-4">Resources</h1>
 
+<!-- Resource Types -->
+<div class="mb-4">
+    <strong>Resource Types:</strong>
+    <div class="d-flex flex-wrap align-items-center mt-2">
+        {% for type, display_name in RESOURCE_TYPES %}
+            <a href="?resource_type={{ type }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" class="btn btn-sm btn-outline-dark mx-1 my-1">
+                <i class="{{ icons|get_icon:type }} mr-1"></i>{{ display_name }}
+            </a>
+        {% endfor %}
+    </div>
+</div>
+
+
+
+
 <!-- Tag Bubbles -->
 <div class="mb-4">
     <strong>Tags:</strong>
     <div class="d-flex flex-wrap align-items-center mt-2">
         {% for tag, count in tags_with_count|slice:":10" %}
-            <a href="?tag={{ tag }}" class="btn btn-sm btn-outline-dark mx-1 my-1">
+            <a href="?tag={{ tag }}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}" class="btn btn-sm btn-outline-dark mx-1 my-1">
                 {{ tag }} <span class="badge bg-dark">{{ count }}</span>
             </a>
         {% endfor %}
@@ -25,13 +40,14 @@
     <div class="all-tags mt-3" style="display:none;">
         <div class="d-flex flex-wrap align-items-center">
             {% for tag, count in tags_with_count|slice:"10:" %}
-                <a href="?tag={{ tag }}" class="btn btn-sm btn-outline-secondary mx-1 my-1">
+                <a href="?tag={{ tag }}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}" class="btn btn-sm btn-outline-secondary mx-1 my-1">
                     {{ tag }} <span class="badge bg-secondary">{{ count }}</span>
                 </a>
             {% endfor %}
         </div>
     </div>
 </div>
+
 
 
 <!-- Displaying Resources -->
