@@ -12,10 +12,9 @@
     <div class="d-flex flex-wrap align-items-center mt-2">
         {% for type, display_name in RESOURCE_TYPES %}
         <a href="?resource_type={{ type }}" class="btn btn-sm {% if resource_type == type %}btn-dark{% else %}btn-outline-dark{% endif %} mx-1 my-1">
-            <i class="{{ icons|get_icon:type }} mr-1"></i> {{ display_name }}
+            <i class="{{ icons|get_icon:type }} mr-1"></i> {{ display_name }} <span class="badge bg-dark ml-1">{{ resource_type_counts|get_item:type }}</span>
         </a>
-    {% endfor %}
-    
+        {% endfor %}
     </div>
 </div>
 
@@ -57,9 +56,7 @@
     {% for resource in resources.object_list %}
     <li class="list-group-item d-flex justify-content-between align-items-center">
         <div>
-            {% if resource.resource_type == 'github_repo' %}
-                <i class="bi bi-github mr-2"></i>
-            {% endif %}
+            <i class="{{ icons|get_icon:resource.resource_type }} mr-2"></i>
             <strong><a href="{{ resource.url }}" class="text-dark" target="_blank">{{ resource.title }}</a></strong><br>
             <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
         </div>
@@ -67,6 +64,7 @@
     </li>
     {% endfor %}
 </ul>
+
 
 <!-- Pagination Controls -->
 <nav aria-label="Resource navigation" class="mt-4">

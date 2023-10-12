@@ -31,6 +31,7 @@ def resources(request):
     paginator = Paginator(resource_list, ITEMS_PER_PAGE)
     page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
+    resource_type_counts = {res_type[0]: Resource.objects.filter(resource_type=res_type[0]).count() for res_type in Resource.RESOURCE_TYPES}
 
     icons = {
         'blog_post': 'bi bi-journal-text',
@@ -43,6 +44,7 @@ def resources(request):
     tags_with_count = Tag.objects.annotate(resource_count=Count('resources')).filter(resource_count__gte=3).values_list('name', 'resource_count').order_by('-resource_count')
 
     context = {
+        'resource_type_counts': resource_type_counts,
         'resources': page_obj,  # Update this to pass the paginated resources
         'tags_with_count': tags_with_count,  # Pass tags with their count
         'resource_type': resource_type,  # Pass the selected resource type
