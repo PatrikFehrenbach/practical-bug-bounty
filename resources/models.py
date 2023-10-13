@@ -15,6 +15,7 @@ class Resource(models.Model):
         ('github_repo', 'GitHub Repository'),
         ('article', 'Article'),
         ('video', 'Video'),
+        ('hackerone_report', 'HackerOne Report'),
         # ... add more types as needed
     )
 

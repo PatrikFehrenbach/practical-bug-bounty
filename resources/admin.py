@@ -6,7 +6,12 @@ from .forms import ImportMediumForm
 import requests
 import os
 from threading import Thread
-
+import csv
+from io import TextIOWrapper
+from .forms import HackerOneReportUploadForm
+from difflib import get_close_matches
+import json
+from django.contrib import messages
 
 ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
 
@@ -15,6 +20,78 @@ ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
 class TagAdmin(admin.ModelAdmin):
     list_display = ('name',)
     search_fields = ('name',)
+
+
+class HackerOneImportMixin:
+    
+    def generate_description(self, data):
+        description = {
+            "vulnerability_information": data.get('vulnerability_information', ''),
+            "reported_on": data.get('created_at', '').split('T')[0],  # Extract the date part
+            "state": f"{data.get('state', 'N/A')} ({data.get('substate', 'N/A')})",
+            "severity_rating": data.get('severity_rating', 'N/A'),
+            "bounty_amount": f"${data.get('bounty_amount', 0)}",
+            "researcher": data.get('reporter', {}).get('username', 'N/A'),  # Researcher's username from reporter field
+            "website": data.get('team', {}).get('profile', {}).get('website', 'N/A')
+        }
+        
+        return json.dumps(description)
+     
+    def import_hackerone(self, request):
+        if request.method == 'POST':
+            form = HackerOneReportUploadForm(request.POST, request.FILES)
+            if form.is_valid():
+                # Iterate through each uploaded file
+                for uploaded_file in request.FILES.getlist('json_files'):
+                    try:  # Start of try block
+                        json_file = uploaded_file.read().decode('utf-8')
+                        data = json.loads(json_file)
+
+                        title = data.get('title')
+                        url = data.get('url')
+                        author = data.get('reporter', {}).get('username')
+                        vulnerability_type = data.get('weakness', {}).get('name')
+                        description = self.generate_description(data)  # Generate the description
+                        
+                        # Create or update the Resource
+                        resource, created = Resource.objects.get_or_create(
+                            title=title,
+                            defaults={
+                                'resource_type': 'hackerone_report',
+                                'url': url,
+                                'author': author,
+                                'description': description,
+                            }
+                        )
+
+                        # If the resource already exists, we might want to update some fields
+                        if not created:
+                            resource.url = url
+                            resource.author = author
+                            resource.description = description
+                            resource.save()
+
+                        # Fetch the best matching tag for the vulnerability type
+                        all_tags = [tag.name for tag in Tag.objects.all()]
+                        matches = get_close_matches(vulnerability_type, all_tags, n=1)
+                        if matches:
+                            matched_tag = Tag.objects.get(name=matches[0])
+                            resource.tags.add(matched_tag)
+                    except Exception as e:  # Handling exceptions
+                        # Log the error for debugging purposes. You can also add more logging details if needed.
+                        print(f"Error processing report from file {uploaded_file.name}: {e}")
+
+                return redirect('admin:resources_resource_changelist')
+        else:
+            form = HackerOneReportUploadForm()
+
+        return render(request, 'admin/csv_upload_form_hackerone.html', {'form': form})
+
+
+    def get_hackerone_urls(self):
+        return [
+            path('import-hackerone/', self.admin_site.admin_view(self.import_hackerone), name='import-hackerone'),
+        ]
 
 # GitHub import mixin
 class GitHubImportMixin:
@@ -100,7 +177,7 @@ class MediumImportMixin:
 
 # ResourceAdmin inheriting from the mixins
 @admin.register(Resource)
-class ResourceAdmin(GitHubImportMixin, MediumImportMixin, admin.ModelAdmin):
+class ResourceAdmin(GitHubImportMixin, MediumImportMixin,HackerOneImportMixin, admin.ModelAdmin):
     list_display = ('title', 'resource_type', 'added_date', 'author')
     list_filter = ('resource_type', 'added_date', 'tags')
     search_fields = ('title', 'description', 'author')
@@ -110,7 +187,7 @@ class ResourceAdmin(GitHubImportMixin, MediumImportMixin, admin.ModelAdmin):
 
     def get_urls(self):
         urls = super().get_urls()
-        return self.get_github_urls() + self.get_medium_urls() + urls
+        return self.get_github_urls() + self.get_medium_urls() + self.get_hackerone_urls() + urls
 
 # Fetch GitHub repo details function
 def fetch_github_repo_details(repo_url):

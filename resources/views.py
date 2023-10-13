@@ -12,6 +12,16 @@ def resources(request):
 
     # Filter by resource_type if provided
     resource_type = request.GET.get('resource_type')
+
+    # Check if the resource_type has changed since the last request
+    last_resource_type = request.session.get('last_resource_type')
+    page_number = request.GET.get('page')
+    if last_resource_type != resource_type:
+        page_number = 1  # Reset page number to 1
+
+    # Update the session with the current resource_type
+    request.session['last_resource_type'] = resource_type
+
     if resource_type:
         resource_list = resource_list.filter(resource_type=resource_type)
 
@@ -29,7 +39,6 @@ def resources(request):
 
     # Pagination for resources
     paginator = Paginator(resource_list, ITEMS_PER_PAGE)
-    page_number = request.GET.get('page')
     page_obj = paginator.get_page(page_number)
     resource_type_counts = {res_type[0]: Resource.objects.filter(resource_type=res_type[0]).count() for res_type in Resource.RESOURCE_TYPES}
 
@@ -54,4 +63,3 @@ def resources(request):
     }
 
     return render(request, 'resources.html', context)
-

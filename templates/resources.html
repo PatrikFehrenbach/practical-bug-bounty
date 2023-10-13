@@ -58,7 +58,22 @@
         <div>
             <i class="{{ icons|get_icon:resource.resource_type }} mr-2"></i>
             <strong><a href="{{ resource.url }}" class="text-dark" target="_blank">{{ resource.title }}</a></strong><br>
-            <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
+            {% if resource.resource_type == 'hackerone_report' %}
+                {% with description_data=resource.description|json_parse %}
+                    <div class="hackerone-description mt-2">
+                        <p class="mb-1"><i class="bi bi-calendar-fill mr-1"></i>Reported on: {{ description_data.reported_on }}</p>
+                        <p class="mb-1"><i class="bi bi-shield-fill-check mr-1"></i>State: {{ description_data.state }}</p>
+                        <p class="mb-1"><i class="bi bi-exclamation-octagon-fill mr-1"></i>Severity Rating: {{ description_data.severity_rating }}</p>
+                        <p class="mb-1"><i class="bi bi-cash-coin mr-1"></i>Bounty Amount: {{ description_data.bounty_amount }}</p>
+                        <p class="mb-1"><i class="bi bi-person-fill mr-1"></i>Researcher: {{ description_data.researcher }}</p>
+                        {% if description_data.website != 'N/A' %}
+                            <p class="mb-1"><i class="bi bi-globe mr-1"></i>Website: {{ description_data.website }}</p>
+                        {% endif %}
+                    </div>
+                {% endwith %}
+            {% else %}
+                <span class="text-muted">{{ resource.description|truncatechars:100 }}</span>
+            {% endif %}
         </div>
         <span class="badge rounded-pill bg-light text-dark">{{ resource.author }}</span>
     </li>
@@ -66,30 +81,39 @@
 </ul>
 
 
+
 <!-- Pagination Controls -->
 <nav aria-label="Resource navigation" class="mt-4">
     <ul class="pagination justify-content-center">
         {% if resources.has_previous %}
         <li class="page-item">
-            <a class="page-link text-dark bg-light" href="?page={{ resources.previous_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" aria-label="Previous">
+            <a class="page-link text-dark bg-light" href="?page={{ resources.previous_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}" aria-label="Previous">
                 <i class="bi bi-chevron-left"></i>
             </a>
         </li>
         {% endif %}
         {% for i in resources.paginator.page_range %}
         <li class="page-item {% if resources.number == i %}active{% endif %}">
-            <a class="page-link text-dark bg-light" href="?page={{ i }}{% if tag_name %}&tag={{ tag_name }}{% endif %}">{{ i }}</a>
+            <a class="page-link text-dark bg-light" href="?page={{ i }}{% if tag_name %}&tag={{ tag_name }}{% endif %}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}">{{ i }}</a>
         </li>
         {% endfor %}
         {% if resources.has_next %}
         <li class="page-item">
-            <a class="page-link text-dark bg-light" href="?page={{ resources.next_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}" aria-label="Next">
+            <a class="page-link text-dark bg-light" href="?page={{ resources.next_page_number }}{% if tag_name %}&tag={{ tag_name }}{% endif %}{% if resource_type %}&resource_type={{ resource_type }}{% endif %}" aria-label="Next">
                 <i class="bi bi-chevron-right"></i>
             </a>
         </li>
         {% endif %}
     </ul>
 </nav>
+
+
+<style>
+    .hackerone-description > div {
+        margin-bottom: 5px;
+    }
+</style>
+
 
 <!-- Script for Toggle Tags Functionality -->
 <script>
@@ -104,6 +128,10 @@ document.getElementById("toggleTags").addEventListener("click", function(event) 
         allTags.style.display = "none";
         toggleIcon.className = "bi bi-chevron-down";
     }
+});
+
+$(function () {
+    $('[data-toggle="popover"]').popover();
 });
 </script>
 
