@@ -45,6 +45,9 @@ if IS_DEBUG == 'True':
 else:
     DEBUG = False
 
+DATA_UPLOAD_MAX_NUMBER_FILES = 5000 
+
+
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = ['https://practicalbugbounty.com', 'https://www.practicalbugbounty.com']
 
