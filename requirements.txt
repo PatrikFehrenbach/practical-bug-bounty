@@ -11,3 +11,5 @@ sentry-sdk[django]
 django-select2
 fuzzywuzzy[speedup]
 feedparser
+tweepy
+python-telegram-bot

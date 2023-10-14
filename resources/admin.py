@@ -15,7 +15,9 @@ from django.contrib import messages
 from .forms import RSSImportForm
 import feedparser
 import re
-
+from telegram import Bot
+import asyncio
+import tweepy
 
 ACCESS_TOKEN = os.environ.get('GITHUB_ACCESS_TOKEN')
 
@@ -251,6 +253,9 @@ class MediumImportMixin:
             path('import-medium/', self.admin_site.admin_view(self.import_medium), name='import-medium'),
         ]
 
+
+
+
 # ResourceAdmin inheriting from the mixins
 @admin.register(Resource)
 class ResourceAdmin(GitHubImportMixin, MediumImportMixin,HackerOneImportMixin,RSSImportMixin, admin.ModelAdmin):
@@ -264,6 +269,52 @@ class ResourceAdmin(GitHubImportMixin, MediumImportMixin,HackerOneImportMixin,RS
     def get_urls(self):
         urls = super().get_urls()
         return self.get_github_urls() + self.get_medium_urls() + self.get_hackerone_urls() + self.get_rss_urls() + urls
+    
+    
+    def send_to_socials(self, request, queryset):
+        for resource in queryset:
+            ResourceAdmin.send_to_telegram(resource)
+            ResourceAdmin.send_to_twitter(resource)
+
+            
+    @staticmethod
+    def send_to_telegram(resource):
+        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN','6087179599:AAHi56bzufqO93sdAGAJpMXxlsKTZ5pU73U')
+        channel_id = os.environ.get('TELEGRAM_CHANNEL_ID','-1001989952476')
+        if not bot_token or not channel_id:
+            raise ValueError("Telegram bot token or channel ID is missing!")
+
+        bot = Bot(token=bot_token)
+
+        message = f"Title: {resource.title}\n"
+        message += f"Type: {resource.get_resource_type_display()}\n"
+        message += f"Author: {resource.author}\n"
+        message += f"URL: {resource.url}"
+
+        asyncio.run(bot.sendMessage(chat_id=channel_id, text=message))
+
+    @staticmethod
+    def send_to_twitter(resource):
+        consumer_key = os.environ.get('TWITTER_CONSUMER_KEY','pI1Bgvl0l8Xo8x97Il8McARIS')
+        consumer_secret = os.environ.get('TWITTER_CONSUMER_SECRET','5fmnpCLSS4jOw3dCBZ3wIjsPoUFocE3UGrDmDHTvHvGw5edYdy')
+        access_token = os.environ.get('TWITTER_ACCESS_TOKEN','1713317372570832896-NHHnV9dOcaxWFaAwWADYwH93nRlivQ')
+        access_token_secret = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET','CMWpGsE4vr6zXzXL5HQyGOJo3GsdmEAoqLl8I2uKPl0Fy')
+        
+        if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
+            raise ValueError("Twitter credentials are missing!")
+
+        client = tweepy.Client(consumer_key=consumer_key,consumer_secret=consumer_secret,access_token=access_token,access_token_secret=access_token_secret)
+
+        tweet = f"Title: {resource.title} by {resource.author}. Learn more: {resource.url}"
+        
+        # Ensure the tweet is within the 280 character limit
+        #tweet = (tweet[:277] + '...') if len(tweet) > 280 else tweet
+        client.create_tweet(text=tweet)
+
+
+    send_to_socials.short_description = "Send selected to socials"
+
+    actions = ['send_to_socials']
 
 # Fetch GitHub repo details function
 def fetch_github_repo_details(repo_url):
