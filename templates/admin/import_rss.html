@@ -1,0 +1,13 @@
+{% extends "admin/base.html" %}
+{% load i18n admin_urls %}
+
+{% block content %}
+    <h1>Import Blog Posts from RSS Feed</h1>
+    <form method="post">
+        {% csrf_token %}
+        <div class="aligned">
+            {{ form.as_p }}
+        </div>
+        <input type="submit" value="Import">
+    </form>
+{% endblock %}

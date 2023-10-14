@@ -4,11 +4,11 @@ from .models import Resource, Tag
 from django.core.paginator import Paginator
 from django.http import HttpResponse
 from django.conf import settings
-import os
-import subprocess
 from django.core.management import call_command
 from django.http import HttpResponse
 import io
+from django.shortcuts import render, redirect
+from resources.models import Resource, Tag
 
 
 def backup_database(request):
@@ -21,7 +21,6 @@ def backup_database(request):
     response = HttpResponse(output, content_type='application/json')
     response['Content-Disposition'] = 'attachment; filename=db_backup.json'
     return response
-
 
 def resources(request):
     # Constants

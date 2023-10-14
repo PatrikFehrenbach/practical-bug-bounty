@@ -18,7 +18,6 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 from resources.views import backup_database
-
 urlpatterns = [
     path('admin/backup/', backup_database, name='backup_database'),
     path('admin/', admin.site.urls),

@@ -17,3 +17,7 @@ class MultipleFileInput(forms.FileInput):
 
 class HackerOneReportUploadForm(forms.Form):
     json_files = forms.FileField(widget=MultipleFileInput())
+
+
+class RSSImportForm(forms.Form):
+    feed_url = forms.URLField(label="RSS Feed URL")
