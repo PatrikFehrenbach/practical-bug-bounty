@@ -279,7 +279,7 @@ class ResourceAdmin(GitHubImportMixin, MediumImportMixin,HackerOneImportMixin,RS
             
     @staticmethod
     def send_to_telegram(resource):
-        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN','6087179599:AAHi56bzufqO93sdAGAJpMXxlsKTZ5pU73U')
+        bot_token = os.environ.get('TELEGRAM_BOT_TOKEN','')
         channel_id = os.environ.get('TELEGRAM_CHANNEL_ID','-1001989952476')
         if not bot_token or not channel_id:
             raise ValueError("Telegram bot token or channel ID is missing!")
@@ -295,10 +295,10 @@ class ResourceAdmin(GitHubImportMixin, MediumImportMixin,HackerOneImportMixin,RS
 
     @staticmethod
     def send_to_twitter(resource):
-        consumer_key = os.environ.get('TWITTER_CONSUMER_KEY','pI1Bgvl0l8Xo8x97Il8McARIS')
-        consumer_secret = os.environ.get('TWITTER_CONSUMER_SECRET','5fmnpCLSS4jOw3dCBZ3wIjsPoUFocE3UGrDmDHTvHvGw5edYdy')
-        access_token = os.environ.get('TWITTER_ACCESS_TOKEN','1713317372570832896-NHHnV9dOcaxWFaAwWADYwH93nRlivQ')
-        access_token_secret = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET','CMWpGsE4vr6zXzXL5HQyGOJo3GsdmEAoqLl8I2uKPl0Fy')
+        consumer_key = os.environ.get('TWITTER_CONSUMER_KEY','')
+        consumer_secret = os.environ.get('TWITTER_CONSUMER_SECRET','')
+        access_token = os.environ.get('TWITTER_ACCESS_TOKEN','')
+        access_token_secret = os.environ.get('TWITTER_ACCESS_TOKEN_SECRET','')
         
         if not all([consumer_key, consumer_secret, access_token, access_token_secret]):
             raise ValueError("Twitter credentials are missing!")
