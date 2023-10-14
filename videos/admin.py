@@ -2,6 +2,30 @@ from django.contrib import admin
 from .models import Module, SubModule, Topic, Video, CourseNote, AdditionalLink
 from adminsortable2.admin import SortableAdminMixin
 from markdownx.admin import MarkdownxModelAdmin
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from resources.models import Resource, Tag
+
+@receiver(post_save, sender=Video)
+def migrate_video_to_resource(sender, instance, **kwargs):
+    # Check if a corresponding resource already exists
+    resource, created = Resource.objects.get_or_create(
+        title=instance.title,
+        defaults={
+            'resource_type': 'video',
+            'description': '',
+            'url': instance.url,
+            'author': '',  # Adjust as needed
+        }
+    )
+    
+    # If the video has tags, migrate them too
+    video_tags = instance.tags.split(",")  # Assuming comma-separated tags in Video model
+    for tag_name in video_tags:
+        tag_name = tag_name.strip()
+        tag, _ = Tag.objects.get_or_create(name=tag_name)
+        resource.tags.add(tag)
+
 
 @admin.register(Module)
 class ModuleAdmin(SortableAdminMixin, admin.ModelAdmin):
